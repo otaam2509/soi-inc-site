@@ -267,3 +267,21 @@
   .cv-drama img{width:104px;flex:none;aspect-ratio:9/16;height:auto;object-fit:cover;border-radius:12px;border:4px solid #1c241f;box-shadow:var(--shadow-s)}
   .cv-drama img:nth-child(2),.card-visual .mock:nth-child(2){margin-top:18px}
   @media (max-width:520px){.card-visual{height:210px;padding:20px 10px}.card-visual .mocks,.card-visual{gap:8px}.card-visual .mock,.cv-drama img{width:92px}.card-visual .mock b{font-size:10px}}
+
+  /* ===== 採用ページの写真(イメージ) ===== */
+  .ph-split{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center}
+  @media (max-width:860px){.ph-split{grid-template-columns:1fr;gap:24px}}
+  .ph-img{margin:0;position:relative}
+  .ph-img img{width:100%;height:auto;border-radius:var(--r);box-shadow:var(--shadow)}
+  figcaption{font-size:11.5px;color:var(--muted)}
+  .ph-img figcaption{position:absolute;right:10px;bottom:8px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+  .inds{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media (max-width:760px){.inds{grid-template-columns:1fr}}
+  .inds figure{margin:0;background:var(--card);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-s)}
+  .inds img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover}
+  .inds figcaption{padding:16px 20px 18px;font-size:13.5px}
+  .inds figcaption b{display:block;font-family:"Noto Serif JP",serif;font-weight:500;font-size:17px;color:var(--dark);margin-bottom:2px}
+  /* 構成例の見本画面: 写真の上に文字 */
+  .mock[style*="--bgimg"]{background:linear-gradient(180deg,rgba(20,40,28,.15) 0%,rgba(20,40,28,.25) 40%,rgba(20,40,28,.78) 100%),var(--bgimg) center/cover;justify-content:flex-end;padding-bottom:30px}
+  .mock[style*="--bgimg"] b{text-shadow:0 1px 6px rgba(0,0,0,.45)}
+  .card-visual .mock[style*="--bgimg"]{padding-bottom:20px}

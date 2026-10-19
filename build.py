@@ -40,9 +40,9 @@ def mailto(service):
 
 # 採用動画の「構成例」(写真を使わない縦型動画の見本画面)
 MOCKS = """<div class="mocks" aria-label="採用動画の構成例">
-  <figure class="mock"><span class="mk-top">仕事の1日</span><b>朝7:30、<br>現場へ出発。</b><span class="mk-sub">出勤から退勤までを<br>60秒で</span><span class="mk-bar"></span></figure>
-  <figure class="mock m2"><span class="mk-top">先輩の一言</span><b>入る前、<br>いちばん不安<br>だったこと。</b><span class="mk-sub">働く本人の言葉で</span><span class="mk-bar"></span></figure>
-  <figure class="mock m3"><span class="mk-top">職場紹介</span><b>休憩室、<br>ちょっと<br>見せます。</b><span class="mk-sub">道具・車両・休憩室</span><span class="mk-bar"></span></figure>
+  <figure class="mock" style="--bgimg:url(/assets/recruit/v_morning.jpg)"><span class="mk-top">仕事の1日</span><b>朝7:30、<br>現場へ出発。</b><span class="mk-sub">出勤から退勤までを<br>60秒で</span><span class="mk-bar"></span></figure>
+  <figure class="mock m2" style="--bgimg:url(/assets/recruit/v_senior.jpg)"><span class="mk-top">先輩の一言</span><b>入る前、<br>いちばん不安<br>だったこと。</b><span class="mk-sub">働く本人の言葉で</span><span class="mk-bar"></span></figure>
+  <figure class="mock m3" style="--bgimg:url(/assets/recruit/v_breakroom.jpg)"><span class="mk-top">職場紹介</span><b>休憩室、<br>ちょっと<br>見せます。</b><span class="mk-sub">道具・車両・休憩室</span><span class="mk-bar"></span></figure>
 </div>"""
 
 RECRUIT_ORG_DESC = "東京・品川の映像制作会社。当社のカメラマンが職場で撮影する人材採用のSNS運用を、企画から撮影・編集・投稿・応募の受け付けまで一式で手がける。"
