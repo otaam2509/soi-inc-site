@@ -1,11 +1,11 @@
 # 株式会社SOI 会社サイト
 
-- 公開先: https://otaam2509.github.io/soi-inc-site/ （GitHub otaam2509/soi-inc-site の main を GitHub Pages で配信）
+- 公開先: https://soi-co-ltd.com/ （2026-10-19取得・Squarespace Domains。GitHub otaam2509/soi-inc-site の main を GitHub Pages で配信・`CNAME`ファイルで独自ドメイン化。旧URL otaam2509.github.io/soi-inc-site/ は自動で転送）
+- 連絡先: info@soi-co-ltd.com
 - 構成: `index.html` 1枚 + `assets/`。ローカル確認は `python3 -m http.server 8793`
 - 方針: ウェディング要素は載せない。実績・お客様の声・数値成果は実物が確認できるまで載せない
 - 素材: 制作例の動画・カット・工程画像は `../AIショートドラマLP/` から複製（架空の商品のサンプル。「架空」表記は外さない）。代表写真・ロゴは旧Next.js版（~/soi-corporate/public/）から
 - 金額はサイトに書かない(2026-09-28志弥指示)。費用は相談時に説明
-- soi-inc.co.jp 取得後: 連絡先メール・og:image のURL・CNAME を差し替える
 - 事業は「人材採用のSNS運用」(実写・当社カメラマンが撮影)と「AIショートドラマ」の2つ(2026-10-13志弥指示)。採用の欄には「AI」「ドラマ」「架空」と書かない
 - トンマナ: SOI公式HP(soiwedding.com テーマ soi-wedding)と同じ色・書体に統一(2026-10-13)。紙色#f7f3ee/墨#141b22/海#2f6b74・#173a41/金#c2a878、見出し=Noto Serif JP 500、英字ラベル=Cormorant Garamond、本文=Noto Sans JP 300、角丸4px。色を足すときは index.html 冒頭の :root だけを触る
 - MVV(#philosophy): 経営方針「玉手の根本」「玉手の理念」から企業向けに言い換えた案(2026-10-13・志弥確認待ち)。Mission=その会社にしかない物語を、伝わる映像にして、届け続ける。/Vision=出会うべき人と、ちゃんと出会える世の中へ。/Value=現場で本物を撮る・見えないところほど丁寧に・続けられる形にする
