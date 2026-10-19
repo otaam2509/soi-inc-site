@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AIで作る動画の品質管理 ― 人物・空間・小物を固定し、1カットずつ確認する方法｜株式会社SOI コラム</title>
+<meta name="description" content="AIで人物や場面を作る動画は、そのままでは顔や衣装、手元、台詞がぶれがちです。参照画像による固定、カットごとの検品、作り直しの基準、最後の人による確認という品質管理の進め方をまとめました。">
+<link rel="canonical" href="https://soi-co-ltd.com/column/drama-ai-quality-check/">
+<meta property="og:site_name" content="株式会社SOI">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://soi-co-ltd.com/column/drama-ai-quality-check/">
+<meta property="og:title" content="AIで作る動画の品質管理 ― 人物・空間・小物を固定し、1カットずつ確認する方法｜株式会社SOI コラム">
+<meta property="og:description" content="AIで人物や場面を作る動画は、そのままでは顔や衣装、手元、台詞がぶれがちです。参照画像による固定、カットごとの検品、作り直しの基準、最後の人による確認という品質管理の進め方をまとめました。">
+<meta property="og:image" content="https://soi-co-ltd.com/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="株式会社SOI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AIで作る動画の品質管理 ― 人物・空間・小物を固定し、1カットずつ確認する方法｜株式会社SOI コラム">
+<meta name="twitter:description" content="AIで人物や場面を作る動画は、そのままでは顔や衣装、手元、台詞がぶれがちです。参照画像による固定、カットごとの検品、作り直しの基準、最後の人による確認という品質管理の進め方をまとめました。">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css?v=20261019">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Organization",
+   "@id": "https://soi-co-ltd.com/#org",
+   "name": "株式会社SOI",
+   "legalName": "株式会社SOI",
+   "alternateName": "SOI CO.,LTD",
+   "url": "https://soi-co-ltd.com/",
+   "logo": "https://soi-co-ltd.com/assets/logo.png",
+   "image": "https://soi-co-ltd.com/assets/og.jpg",
+   "email": "info@soi-co-ltd.com",
+   "description": "東京・品川の映像制作会社。現場で撮影する人材採用のSNS運用と、AIで作る商品のショートドラマを、企画・制作から投稿・運用まで一式で手がける。",
+   "address": {
+    "@type": "PostalAddress",
+    "postalCode": "142-0041",
+    "addressRegion": "東京都",
+    "addressLocality": "品川区",
+    "streetAddress": "戸越5-18-16-2F",
+    "addressCountry": "JP"
+   },
+   "founder": {
+    "@type": "Person",
+    "@id": "https://soi-co-ltd.com/company/#tamate",
+    "name": "玉手志弥",
+    "alternateName": "Yukiya Tamate",
+    "jobTitle": "代表取締役",
+    "url": "https://soi-co-ltd.com/company/#about"
+   },
+   "knowsAbout": [
+    "採用動画",
+    "人材採用のSNS運用",
+    "縦型ショート動画",
+    "AIショートドラマ",
+    "映像制作",
+    "公式LINE運用"
+   ]
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://soi-co-ltd.com/#website",
+   "url": "https://soi-co-ltd.com/",
+   "name": "株式会社SOI",
+   "inLanguage": "ja",
+   "publisher": {
+    "@id": "https://soi-co-ltd.com/#org"
+   }
+  },
+  {
+   "@type": "WebPage",
+   "@id": "https://soi-co-ltd.com/column/drama-ai-quality-check/#webpage",
+   "url": "https://soi-co-ltd.com/column/drama-ai-quality-check/",
+   "name": "AIで作る動画の品質管理 ― 人物・空間・小物を固定し、1カットずつ確認する方法｜株式会社SOI コラム",
+   "description": "AIで人物や場面を作る動画は、そのままでは顔や衣装、手元、台詞がぶれがちです。参照画像による固定、カットごとの検品、作り直しの基準、最後の人による確認という品質管理の進め方をまとめました。",
+   "inLanguage": "ja",
+   "isPartOf": {
+    "@id": "https://soi-co-ltd.com/#website"
+   },
+   "about": {
+    "@id": "https://soi-co-ltd.com/#org"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "トップ",
+     "item": "https://soi-co-ltd.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "コラム",
+     "item": "https://soi-co-ltd.com/column/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "AIで作る動画の品質管理 ― 人物・空間・小物を固定し、1カットずつ確認する方法",
+     "item": "https://soi-co-ltd.com/column/drama-ai-quality-check/"
+    }
+   ]
+  },
+  {
+   "@type": "BlogPosting",
+   "@id": "https://soi-co-ltd.com/column/drama-ai-quality-check/#article",
+   "headline": "AIで作る動画の品質管理 ― 人物・空間・小物を固定し、1カットずつ確認する方法",
+   "description": "AIで人物や場面を作る動画は、そのままでは顔や衣装、手元、台詞がぶれがちです。参照画像による固定、カットごとの検品、作り直しの基準、最後の人による確認という品質管理の進め方をまとめました。",
+   "datePublished": "2026-10-19",
+   "dateModified": "2026-10-19",
+   "inLanguage": "ja",
+   "mainEntityOfPage": {
+    "@id": "https://soi-co-ltd.com/column/drama-ai-quality-check/#webpage"
+   },
+   "image": "https://soi-co-ltd.com/assets/og.jpg",
+   "author": {
+    "@id": "https://soi-co-ltd.com/#org"
+   },
+   "publisher": {
+    "@id": "https://soi-co-ltd.com/#org"
+   },
+   "articleSection": "ショートドラマ・動画"
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">本文へ移動</a>
+<nav aria-label="メインメニュー"><div class="wrap">
+  <a class="logo" href="/" aria-label="株式会社SOI トップへ">SOI<small>株式会社SOI</small></a>
+  <div class="links"><span class="menu"><a href="/recruit/">採用SNS運用</a><a href="/short-drama/">AIショートドラマ</a><a href="/column/">コラム</a><a href="/company/">会社概要</a></span><a class="btn" href="#contact">相談する</a></div>
+</div>
+<div class="subnav"><a href="/recruit/">採用SNS運用</a><a href="/short-drama/">AIショートドラマ</a><a href="/column/">コラム</a><a href="/company/">会社概要</a></div></nav>
+
+<main id="main">
+<header class="page-hero">
+  <div class="wrap">
+    <ol class="crumbs" aria-label="現在地"><li><a href="/">トップ</a></li><li><a href="/column/">コラム</a></li><li aria-current="page">AIで作る動画の品質管理 ― 人物・空間・小物を固定し、1カットずつ確認する方法</li></ol>
+    <div class="post-meta"><span class="cat">ショートドラマ・動画</span><span>公開 <time datetime="2026-10-19">2026.10.19</time></span></div>
+    <h1>AIで作る動画の品質管理 ― 人物・空間・小物を固定し、1カットずつ確認する方法</h1>
+    <p class="lead">AIで人物や場面を作る動画は、そのままでは顔や衣装、手元、台詞がぶれがちです。参照画像による固定、カットごとの検品、作り直しの基準、最後の人による確認という品質管理の進め方をまとめました。</p>
+  </div>
+</header>
+
+<section><div class="wrap">
+  <article class="prose post-body">
+<div class="toc" role="navigation" aria-label="目次"><b>目次</b><ul><li><a href="#s1">まず「固定するもの」を決める</a></li><li><a href="#s2">台本を、カットと発話に分ける</a></li><li><a href="#s3">生成したら、カットごとに検品する</a></li><li><a href="#s4">台詞の重複や不自然な手・表情は、作り直す</a></li><li><a href="#s5">時間の経過は、画面の表示で見せる</a></li><li><a href="#s6">最後は、人が1カットずつ確認する</a></li><li><a href="#s7">作り直しを減らす、指示の書き方</a></li><li><a href="#s8">まとめ</a></li></ul></div>
+<p>AIで動画を作ると、出演者の手配やロケをしなくても、人物のいる場面を作れます。一方で、そのまま使うと、カットごとに顔が変わる、手の指が不自然になる、同じ台詞が二度流れる、といったことが起こりえます。</p>
+<p>品質を決めるのは、AIの性能だけではありません。作る前の固定と、作ったあとの検品の仕組みです。この記事では、当社がショートドラマを作るときの品質管理の進め方を紹介します。</p>
+<h2 id="s1">まず「固定するもの」を決める</h2>
+<p>AIは、同じ指示でも毎回少しずつ違う絵を出します。そこで、作り始める前に、変えてはいけないものを決めて、参照画像として用意します。</p>
+<ul><li><strong>人物</strong>：顔、髪型、体格、衣装。登場人物ごとに設定画を作る</li><li><strong>空間</strong>：家や事務所の間取り。入口から部屋までの位置関係</li><li><strong>小物</strong>：スマホの色や形、バッグ、時計など。持ち主も決めておく</li><li><strong>場所の細部</strong>：たとえば「水漏れはシンク下のここ」と決めたら、別の場所に変えない</li></ul>
+<p>小物は見落としやすいところです。同じ人が持っているスマホの色が、カットごとに変わるだけで、見る人は「何か違う」と感じます。人物のほか、母が使う端末と父が使う端末は別、というところまで決めておきます。</p>
+<aside class="soi-view"><b>SOIの考え方</b><p>人物・衣装・空間・小物は、撮り始める前に参照画像で固定します。固定したものを、カットごとにすべて指示に渡し、毎回ゼロから作らせないようにしています。</p></aside>
+<h2 id="s2">台本を、カットと発話に分ける</h2>
+<p>固定ができたら、台本を細かく分けます。1本の動画を、カット単位と発話単位に分解し、それぞれに番号を付けます。</p>
+<ul><li>どのカットで、誰が、何を話すか</li><li>そのカットの画角（正面、横、手元など）</li><li>時間の目安（秒数）</li></ul>
+<p>番号を付けておくと、あとで「3カット目の母の台詞だけ作り直す」と、ピンポイントで指示できます。全体を最初から作り直す必要がなくなり、時間と手間を抑えられます。</p>
+<h2 id="s3">生成したら、カットごとに検品する</h2>
+<p>作った映像は、すぐ使いません。1回の生成ごとに、検品の記録を残します。見る項目はおおむね次のとおりです。</p>
+<ul><li><strong>人物の連続性</strong>：顔、髪、衣装がカットをまたいでも同じか</li><li><strong>小物の連続性</strong>：スマホの色や持つ手が入れ替わっていないか</li><li><strong>手元</strong>：指の数や形、持ち方が不自然でないか</li><li><strong>表情</strong>：場面に合った表情か。急に不自然な笑顔になっていないか</li><li><strong>画面の文字</strong>：読めない文字や、意図しない文字が映っていないか</li><li><strong>音声</strong>：台詞が決めた順に、決めた回数だけ話されているか</li></ul>
+<p>目で見るだけでなく、音声は文字起こしにかけて、台詞の内容と順番も確認します。</p>
+<h2 id="s4">台詞の重複や不自然な手・表情は、作り直す</h2>
+<p>検品でよく見つかるのが、同じ句が二度繰り返されるような台詞の重複です。カットが切り替わるところで、AIが説明を最初からやり直してしまうことがあります。</p>
+<p>こうした問題が出たときは、次のように扱います。</p>
+<ol><li>問題のあったカットだけを特定する</li><li>台詞をカットごとに「一度だけ言う短い句」に分け直す</li><li>そのカットだけを作り直す</li><li>良かった部分は残して、失敗した部分だけを差し替える</li></ol>
+<p>手や表情の崩れも同じです。直せるものを無理に編集で隠すより、作り直すほうが早く、仕上がりも自然になります。</p>
+<aside class="soi-view"><b>SOIの考え方</b><p>良いカットは残し、悪いカットだけを作り直します。「だいたい合っている」で通さず、台詞の重複や不自然な手・表情が残るカットは採用しません。</p></aside>
+<h2 id="s5">時間の経過は、画面の表示で見せる</h2>
+<p>ドラマでは「数分後」「約1時間後」のように、時間が進む場面があります。AIの映像は、時間の流れを自然に作るのが苦手です。そのため、時間経過は映像の力で作らず、編集で表示します。</p>
+<ul><li>黒い背景に、短い言葉を置いて場面をつなぐ</li><li>時計の画面などを置き換えて、時間が進んだことを示す</li><li>読み上げはせず、画面の文字だけで伝える</li><li>表示の長さは、読める長さを確保する</li></ul>
+<p>文字は、通常の台詞テロップとは見た目を変えると、「ここで時間が飛んだ」と見る人にすぐ伝わります。</p>
+<h2 id="s6">最後は、人が1カットずつ確認する</h2>
+<p>検品の仕組みを作っても、最後は人が確認します。仕上がった動画を、1カットずつ再生して見ます。</p>
+<ul><li>全体を通して、音と映像が合っているか</li><li>字幕と台詞の内容が一致しているか</li><li>切り替わる前後で、人物や小物が入れ替わっていないか</li><li>実物が受け取れていない素材（ロゴなど）が、仮の表示のままになっていないか</li></ul>
+<p>仮の表示のものは、仮のまま記録し、受け取ったことにはしません。確認した結果と、作り直した履歴は、記録として残しておきます。</p>
+<h2 id="s7">作り直しを減らす、指示の書き方</h2>
+<p>作り直しは、時間も費用もかかります。減らすために、最初の指示を丁寧に書きます。</p>
+<ul><li>固定する参照画像を、毎回すべて渡す</li><li>1回の生成に入れる動きを、少なくする（人物の移動と手元の細かい動きを同時に入れない）</li><li>台詞は、カットごとに一度だけ言う短い句に分けて指示する</li><li>映してはいけないもの（余計な人物、読める文字など）を、先に書いておく</li></ul>
+<p>動きを欲張らないことは、とくに効果があります。1カットで「立ち上がって、振り返って、スマホを見せて、話す」を全部やらせるより、2つ3つのカットに分けたほうが、崩れにくくなります。</p>
+<p>また、検品の記録には、使った素材、生成した回数、採用したカットと不採用にしたカットを書き留めます。あとから「なぜこのカットを選んだか」を説明できることが、品質管理の土台になります。</p>
+<h2 id="s8">まとめ</h2>
+<ul><li>作り始める前に、人物・衣装・空間・小物を参照画像で固定する</li><li>台本をカットと発話に分け、番号を付けて管理する</li><li>生成のたびに、人物・小物・手元・表情・画面の文字・音声を検品する</li><li>台詞の重複や不自然な手・表情があるカットは作り直す</li><li>時間経過は、映像で作らず画面の表示で見せる</li><li>最後は、人が1カットずつ確認してから納品する</li></ul>
+  </article>
+  <div class="post-cta"><b>AIショートドラマの制作・運用について</b><span>この記事の内容を、御社の場合にあてはめた企画案を無料でお作りします。</span>
+    <div class="ctas"><a class="cta" href="/short-drama/">AIショートドラマの制作・運用を見る</a><a class="cta ghost" href="#contact">無料で相談する</a></div></div>
+  <p class="byline">文・株式会社SOI（東京・品川の映像制作会社）</p>
+</div></section>
+<section class="tint-sand"><div class="wrap"><div class="kicker"><span class="en">Column</span>あわせて読みたい</div><div class="posts"><a class="post" href="/column/drama-analyze-winners/"><span class="meta"><span class="cat">ショートドラマ・動画</span><time datetime="2026-10-19">2026.10.19</time></span><b>伸びた動画を分解してから作る ― 勝った型を要素に分けて学ぶ方法</b><span class="ex">短い動画は、思いつきで作るより、伸びた動画を要素に分けて学んでから作るほうが失敗を減らせます。感情のモノローグと間、保存したくなるチェックリスト型、結果を作りだけで判断しない理由をまとめました。</span></a><a class="post" href="/column/drama-not-ai-looking/"><span class="meta"><span class="cat">ショートドラマ・動画</span><time datetime="2026-10-19">2026.10.19</time></span><b>「AIっぽい」が「うそっぽい」に変わる前に ― 信頼を落とさない見せ方の工夫</b><span class="ex">AIで作った動画やページは、見た目の飾りや誇張が重なると、うそっぽく見えて信頼を落とします。光のにじみや決めゼリフを使わない、AIの表記は必要な場所だけにする、実績を作らない、といった当社の見せ方を紹介します。</span></a><a class="post" href="/column/drama-script-structure/"><span class="meta"><span class="cat">ショートドラマ・動画</span><time datetime="2026-10-19">2026.10.19</time></span><b>売り込みは飛ばされる ― 場面で見せるショートドラマ台本の組み立て方</b><span class="ex">縦型の短い動画では、説明や売り込みから始めると次へ飛ばされやすくなります。最初の声から入り、困りごとから安心までを場面で見せる台本の組み立て方を、制作の実例をもとに解説します。</span></a></div></div></section>
+
+<section id="contact" class="cta-band"><div class="wrap">
+  <div class="kicker"><span class="en">Contact</span>お問い合わせ</div>
+  <h2>無料で、企画案をお作りします</h2>
+  <p>御社のサイトを拝見して、採用のSNS運用やショートドラマの企画案を先にお作りします。ここまで費用はかかりません。会社名と気になっているサービスだけお送りください。</p>
+  <div class="ctas">
+    <a class="cta" href="mailto:info@soi-co-ltd.com?subject=%E4%BC%81%E7%94%BB%E6%A1%88%E3%81%AE%E7%9B%B8%E8%AB%87&amp;body=%E4%BC%9A%E7%A4%BE%E5%90%8D%EF%BC%9A%0A%E3%81%94%E6%8B%85%E5%BD%93%E8%80%85%E5%90%8D%EF%BC%9A%0A%E6%B0%97%E3%81%AB%E3%81%AA%E3%81%A3%E3%81%A6%E3%81%84%E3%82%8B%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%EF%BC%88AI%E3%82%B7%E3%83%A7%E3%83%BC%E3%83%88%E3%83%89%E3%83%A9%E3%83%9E%EF%BC%89%EF%BC%9A%0A%E5%BE%A1%E7%A4%BE%E3%82%B5%E3%82%A4%E3%83%88%E3%81%AEURL%EF%BC%9A%0A">メールで相談する</a>
+    <a class="cta ghost" href="https://timerex.net/s/otama2509_3ae3/721d36be" target="_blank" rel="noopener">オンライン面談を予約する</a>
+  </div>
+  <span class="mail">メールソフトが開かない場合は info@soi-co-ltd.com へ直接お送りください ／ 面談はオンライン30分〜</span>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div><img class="flogo" src="/assets/logo.png" alt="SOI CO.,LTD" width="330" height="190" loading="lazy"></div>
+  <div class="fmeta">
+    <div class="fnav" role="navigation" aria-label="フッターメニュー"><a href="/">トップ</a><a href="/recruit/">採用SNS運用</a><a href="/short-drama/">AIショートドラマ</a><a href="/column/">コラム</a><a href="/company/">会社概要</a></div>
+    <span>株式会社SOI　〒142-0041 東京都品川区戸越5-18-16-2F</span>
+    <span class="legal"><a href="/privacy/">プライバシーポリシー</a></span>
+    <span class="copy">© SOI CO.,LTD</span>
+  </div>
+</div></footer>
+<script src="/assets/js/site.js?v=20261019" defer></script>
+</body>
+</html>

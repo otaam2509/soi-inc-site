@@ -412,6 +412,13 @@ def check(pages):
             print(f"注意 {name}: 説明文が{d}字(60〜130字が目安)")
         for block in re.findall(r'<script type="application/ld\+json">(.*?)</script>', text, re.S):
             json.loads(block)
+        if meta.get("article"):  # コラム: 金額・割合・社外秘の語が混ざっていないか
+            body = re.sub(r"<script.*?</script>|<nav.*?</nav>|<footer.*?</footer>|<section id=\"contact\".*?</section>", "", text, flags=re.S)
+            body = re.sub(r"<[^>]+>", "", body)
+            for pat in (r"\d[\d,]*\s*(?:万円|円)", r"\d+(?:\.\d+)?\s*[%％]", r"\d[\d,]*\s*(?:再生|件の|通の)",
+                        r"ウェディング|前撮り|結婚式|新郎|新婦|石井|腸活|腸妊活|ヒロメル|水道職人|liveroa|Liberoa"):
+                for m in re.finditer(pat, body):
+                    print(f"NG {name}: 公開NGの可能性「{m.group(0)}」… {body[max(0, m.start() - 25):m.end() + 10]!r}"); ng += 1
         if meta.get("org_description"):  # 採用まわりのページに禁止語が出ていないか(メニュー・フッターは除く)
             body = re.sub(r'<nav.*?</nav>|<div class="fnav".*?</div>', "", text, flags=re.S)
             body = urllib.parse.unquote(body)
