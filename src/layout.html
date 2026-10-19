@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{title}}</title>
+<meta name="description" content="{{description}}">
+<link rel="canonical" href="{{url}}">
+<meta property="og:site_name" content="株式会社SOI">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:type" content="{{og_type}}">
+<meta property="og:url" content="{{url}}">
+<meta property="og:title" content="{{og_title}}">
+<meta property="og:description" content="{{description}}">
+<meta property="og:image" content="{{site}}/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="株式会社SOI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{og_title}}">
+<meta name="twitter:description" content="{{description}}">
+<meta name="robots" content="{{robots}}">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css?v={{version}}">
+{{jsonld}}
+</head>
+<body>
+<a class="skip" href="#main">本文へ移動</a>
+<nav aria-label="メインメニュー"><div class="wrap">
+  <a class="logo" href="/" aria-label="株式会社SOI トップへ">SOI<small>株式会社SOI</small></a>
+  <div class="links"><span class="menu">{{nav}}</span><a class="btn" href="#contact">相談する</a></div>
+</div>
+<div class="subnav">{{nav}}</div></nav>
+
+<main id="main">
+{{content}}
+
+<section id="contact" class="cta-band"><div class="wrap">
+  <div class="kicker"><span class="en">Contact</span>お問い合わせ</div>
+  <h2>無料で、企画案をお作りします</h2>
+  <p>{{contact_text}}</p>
+  <div class="ctas">
+    <a class="cta" href="{{mailto}}">メールで相談する</a>
+    <a class="cta ghost" href="{{booking_url}}" target="_blank" rel="noopener">オンライン面談を予約する</a>
+  </div>
+  <span class="mail">メールソフトが開かない場合は info@soi-co-ltd.com へ直接お送りください ／ 面談はオンライン30分〜</span>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div><img class="flogo" src="/assets/logo.png" alt="SOI CO.,LTD" width="330" height="190" loading="lazy"></div>
+  <div class="fmeta">
+    <div class="fnav" role="navigation" aria-label="フッターメニュー">{{footnav}}</div>
+    <span>株式会社SOI　〒142-0041 東京都品川区戸越5-18-16-2F</span>
+    <span class="legal"><a href="/privacy/">プライバシーポリシー</a></span>
+    <span class="copy">© SOI CO.,LTD</span>
+  </div>
+</div></footer>
+<script src="/assets/js/site.js?v={{version}}" defer></script>
+</body>
+</html>

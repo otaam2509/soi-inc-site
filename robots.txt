@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://soi-co-ltd.com/sitemap.xml

@@ -2,7 +2,12 @@
 
 - 公開先: https://soi-co-ltd.com/ （2026-10-19取得・Squarespace Domains。GitHub otaam2509/soi-inc-site の main を GitHub Pages で配信・`CNAME`ファイルで独自ドメイン化。旧URL otaam2509.github.io/soi-inc-site/ は自動で転送）
 - 連絡先: info@soi-co-ltd.com
-- 構成: `index.html` 1枚 + `assets/`。ローカル確認は `python3 -m http.server 8793`
+- 構成(2026-10-19 複数ページ化): **編集するのは `src/` だけ**。`python3 build.py --check` で公開用HTMLを書き出し＋点検(リンク切れ・alt・h1・構造化データ)。書き出したファイル(index.html・recruit/・short-drama/・company/・privacy/・404.html・sitemap.xml)もコミットする(GitHub Pagesはそのまま配信)
+  - `src/layout.html` = 全ページ共通(head・メニュー・お問い合わせ帯・フッター) / `src/pages/*.html` = 各ページ本文。先頭の `<!--page {...}-->` に題名・説明文・パス等
+  - `assets/css/site.css` = 見た目(色は冒頭 :root だけ触る) / `assets/js/site.js` = 動画の自動再生
+  - FAQは `<details class="q"><summary>質問</summary><div class="a">答え</div></details>` で書けば、検索向けFAQ構造化データに自動変換
+  - `llms.txt` = AI検索向けの会社要約(事実が変わったら手で直す) / `robots.txt` / `sitemap.xml`(自動)
+  - ローカル確認: `python3 -m http.server 8794` → http://localhost:8794/
 - 方針: ウェディング要素は載せない。実績・お客様の声・数値成果は実物が確認できるまで載せない
 - 素材: 制作例の動画・カット・工程画像は `../AIショートドラマLP/` から複製（架空の商品のサンプル。「架空」表記は外さない）。代表写真・ロゴは旧Next.js版（~/soi-corporate/public/）から
 - 金額はサイトに書かない(2026-09-28志弥指示)。費用は相談時に説明
@@ -11,3 +16,6 @@
 - MVV(#philosophy): 経営方針「玉手の根本」「玉手の理念」から企業向けに言い換えた案(2026-10-13・志弥確認待ち)。Mission=その会社にしかない物語を、伝わる映像にして、届け続ける。/Vision=出会うべき人と、ちゃんと出会える世の中へ。/Value=現場で本物を撮る・見えないところほど丁寧に・続けられる形にする
 - 後半の型(2026-10-13 志弥「後半ほどトンマナが弱い」→修正): 地色は 紙→墨青(理念)→紙→砂(採用)→紙→砂(作り方)→紙→砂(代表)→紙→墨青の帯(問い合わせ)→濃色フッター と交互。箱は枠線でなく影(--shadow/--shadow-s)、表は見出し列を砂色(.tbl)。新しい欄を足すときもこの交互と影を守る
 - トンマナの正本(2026-10-14): https://claude.ai/artifact/WsZggfk4zjNnpFFCTMg5dt (Design System。色・書体・言葉・形・写真・部品見本)。金は3段=gold(濃い地の上と差し線)/gold-deep #927642(白・紙の上の大きな数字)/gold-text #6f5a32(紙・砂の上の小さな文字)。紙色の上にgoldの文字は置かない(2.1:1で読めない)
+
+- 採用ページ(/recruit/)は本文・構造化データ・メール下書きにも「AI」「ドラマ」「架空」を出さない(build.pyの org_description / mail_service で切替)。お問い合わせ帯の文はページごとに front matter の contact_text
+- オンライン面談の予約先 = TimeRex(build.py の BOOKING_URL)
