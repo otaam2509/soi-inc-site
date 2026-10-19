@@ -38,6 +38,13 @@ def mailto(service):
     return "mailto:info@soi-co-ltd.com?subject=" + quote("企画案の相談") + "&amp;body=" + quote(body)
 
 
+# 採用動画の「構成例」(写真を使わない縦型動画の見本画面)
+MOCKS = """<div class="mocks" aria-label="採用動画の構成例">
+  <figure class="mock"><span class="mk-top">仕事の1日</span><b>朝7:30、<br>現場へ出発。</b><span class="mk-sub">出勤から退勤までを<br>60秒で</span><span class="mk-bar"></span></figure>
+  <figure class="mock m2"><span class="mk-top">先輩の一言</span><b>入る前、<br>いちばん不安<br>だったこと。</b><span class="mk-sub">働く本人の言葉で</span><span class="mk-bar"></span></figure>
+  <figure class="mock m3"><span class="mk-top">職場紹介</span><b>休憩室、<br>ちょっと<br>見せます。</b><span class="mk-sub">道具・車両・休憩室</span><span class="mk-bar"></span></figure>
+</div>"""
+
 RECRUIT_ORG_DESC = "東京・品川の映像制作会社。当社のカメラマンが職場で撮影する人材採用のSNS運用を、企画から撮影・編集・投稿・応募の受け付けまで一式で手がける。"
 
 CONTACT_TEXT_DEFAULT = ("御社のサイトを拝見して、採用のSNS運用やショートドラマの企画案を先にお作りします。"
@@ -336,6 +343,8 @@ def build():
     for meta, content, src in items:
         content = content.replace("{{crumbs}}", crumbs_html(meta))
         content = content.replace("{{latest_columns}}", article_cards(arts[:3]))
+        content = re.sub(r"\{\{icon:(\w+)\}\}", lambda m: f'<svg class="ic" aria-hidden="true"><use href="/assets/icons.svg#{m.group(1)}"/></svg>', content)
+        content = content.replace("{{mocks}}", MOCKS)
         for key in CATEGORIES:
             content = content.replace("{{columns:" + key + "}}", article_cards([a for a in arts if a["category"] == key][:3]))
         html_out = layout
