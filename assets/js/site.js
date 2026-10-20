@@ -8,3 +8,11 @@
   });},{threshold:.5});
   document.querySelectorAll("video[data-autoplay-inview]").forEach(function(v){ io.observe(v); });
 })();
+
+// 問い合わせボタンのクリックをGoogleアナリティクスに記録(LINE/メール別)
+document.addEventListener("click",function(e){
+  var a=e.target.closest&&e.target.closest("a[data-track], a[href^='mailto:'], a[href*='line.me']");
+  if(!a||typeof gtag!=="function") return;
+  var kind=a.getAttribute("data-track")||(a.href.indexOf("mailto:")===0?"mail":"line");
+  gtag("event","generate_lead",{method:kind,page_path:location.pathname});
+});

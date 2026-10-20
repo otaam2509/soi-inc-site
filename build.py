@@ -31,6 +31,7 @@ SITE = "https://soi-co-ltd.com"
 VERSION = datetime.date.today().strftime("%Y%m%d")
 # 相談の窓口=代表 玉手志弥の公式LINE(あいさつ文から面談予約へ。2026-10-20 志弥指示でフォームの代わりに)
 LINE_URL = "https://line.me/R/ti/p/@217ombzj"
+GA_ID = "G-GR6X7ZXK0D"  # Googleアナリティクス(2026-10-20作成・info@soi-co-ltd.com)
 
 
 def mailto(service):
@@ -367,6 +368,7 @@ def build():
             "mailto": mailto(meta.get("mail_service", "人材採用のSNS運用／AIショートドラマ")),
             "contact_text": meta.get("contact_text", CONTACT_TEXT_DEFAULT),
             "line_url": LINE_URL,
+            "ga_id": GA_ID,
             "content": content.strip(),
         }
         for k, v in repl.items():

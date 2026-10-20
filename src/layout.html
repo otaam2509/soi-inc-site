@@ -26,6 +26,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/site.css?v={{version}}">
+<!-- Google Analytics(GA4・info@soi-co-ltd.com のアカウント) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ga_id}}"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','{{ga_id}}');</script>
 {{jsonld}}
 </head>
 <body>
@@ -44,8 +47,8 @@
   <h2>無料で、企画案をお作りします</h2>
   <p>{{contact_text}}</p>
   <div class="ctas">
-    <a class="cta cta-line" href="{{line_url}}" target="_blank" rel="noopener">{{icon:chat}}公式LINEで相談する</a>
-    <a class="cta ghost" href="{{mailto}}">メールで相談する</a>
+    <a class="cta cta-line" href="{{line_url}}" target="_blank" rel="noopener" data-track="line">{{icon:chat}}公式LINEで相談する</a>
+    <a class="cta ghost" href="{{mailto}}" data-track="mail">メールで相談する</a>
   </div>
   <span class="mail">LINEは代表の玉手が直接お返事します。オンライン面談（30分〜）のご予約もLINEからどうぞ。<br>メールの場合は info@soi-co-ltd.com へ</span>
 </div></section>
