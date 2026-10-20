@@ -30,7 +30,7 @@ ROOT = Path(__file__).resolve().parent
 SITE = "https://soi-co-ltd.com"
 VERSION = datetime.date.today().strftime("%Y%m%d")
 # 相談の窓口=代表 玉手志弥の公式LINE(あいさつ文から面談予約へ。2026-10-20 志弥指示でフォームの代わりに)
-LINE_URL = "https://line.me/R/ti/p/@217ombzj"
+LINE_URL = "https://lin.ee/TMkuCTn"  # LINE公式マネージャー「友だち追加用URL」(2026-10-20取得)
 GA_ID = "G-GR6X7ZXK0D"  # Googleアナリティクス(2026-10-20作成・info@soi-co-ltd.com)
 
 
