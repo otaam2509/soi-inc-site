@@ -76,6 +76,9 @@ ORG = {
     "logo": SITE + "/assets/logo.png",
     "image": SITE + "/assets/og.jpg",
     "email": "info@soi-co-ltd.com",
+    "foundingDate": "2024-09-12",
+    "identifier": {"@type": "PropertyValue", "propertyID": "法人番号", "value": "6010703007351"},
+    "areaServed": {"@type": "Country", "name": "日本"},
     "description": "東京・品川の映像制作会社。現場で撮影する人材採用のSNS運用と、AIで作る商品のショートドラマを、企画・制作から投稿・運用まで一式で手がける。",
     "address": {
         "@type": "PostalAddress",
