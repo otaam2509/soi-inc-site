@@ -29,7 +29,8 @@ from urllib.parse import quote
 ROOT = Path(__file__).resolve().parent
 SITE = "https://soi-co-ltd.com"
 VERSION = datetime.date.today().strftime("%Y%m%d")
-BOOKING_URL = "https://timerex.net/s/otama2509_3ae3/721d36be"
+# 相談の窓口=代表 玉手志弥の公式LINE(あいさつ文から面談予約へ。2026-10-20 志弥指示でフォームの代わりに)
+LINE_URL = "https://line.me/R/ti/p/@217ombzj"
 
 
 def mailto(service):
@@ -362,11 +363,12 @@ def build():
             "footnav": menu_links(meta["path"], footer=True),
             "mailto": mailto(meta.get("mail_service", "人材採用のSNS運用／AIショートドラマ")),
             "contact_text": meta.get("contact_text", CONTACT_TEXT_DEFAULT),
-            "booking_url": BOOKING_URL,
+            "line_url": LINE_URL,
             "content": content.strip(),
         }
         for k, v in repl.items():
             html_out = html_out.replace("{{" + k + "}}", v)
+        html_out = re.sub(r"\{\{icon:(\w+)\}\}", lambda m: f'<svg class="ic" aria-hidden="true"><use href="/assets/icons.svg#{m.group(1)}"/></svg>', html_out)
         dst = out_path(meta, src)
         dst.parent.mkdir(parents=True, exist_ok=True)
         dst.write_text(html_out, encoding="utf-8")

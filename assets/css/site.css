@@ -285,3 +285,6 @@
   .mock[style*="--bgimg"]{background:linear-gradient(180deg,rgba(20,40,28,.15) 0%,rgba(20,40,28,.25) 40%,rgba(20,40,28,.78) 100%),var(--bgimg) center/cover;justify-content:flex-end;padding-bottom:30px}
   .mock[style*="--bgimg"] b{text-shadow:0 1px 6px rgba(0,0,0,.45)}
   .card-visual .mock[style*="--bgimg"]{padding-bottom:20px}
+  .cta-band .cta.cta-line{background:#fff;color:var(--dark)}
+  .cta-band .cta.cta-line .ic{color:#06c755}
+  .cta-band .cta .ic{width:20px;height:20px;margin:0;color:currentColor}

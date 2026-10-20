@@ -18,7 +18,7 @@
 - トンマナの正本(2026-10-14): https://claude.ai/artifact/WsZggfk4zjNnpFFCTMg5dt (Design System。色・書体・言葉・形・写真・部品見本)。金は3段=gold(濃い地の上と差し線)/gold-deep #927642(白・紙の上の大きな数字)/gold-text #6f5a32(紙・砂の上の小さな文字)。紙色の上にgoldの文字は置かない(2.1:1で読めない)
 
 - 採用ページ(/recruit/)は本文・構造化データ・メール下書きにも「AI」「ドラマ」「架空」を出さない(build.pyの org_description / mail_service で切替)。お問い合わせ帯の文はページごとに front matter の contact_text
-- オンライン面談の予約先 = TimeRex(build.py の BOOKING_URL)
+- 相談の窓口 = 代表 玉手志弥の公式LINE @217ombzj(build.py の LINE_URL・2026-10-20 志弥指示でフォームは作らずLINEへ。面談予約はLINEのあいさつ文から)
 - **色(2026-10-19 志弥指示で変更)**: 「くすんで暗い」→ **アースグリーン #3f6f4a 1色＋白**のクリーンな配色に。濃い帯(理念・お問い合わせ以外)は廃止、薄い緑 #f4f8f3 の地＋白い箱。金・海色・紙色は使わない(変数名 --gold 等は互換のため残し、中身は緑)。上の「トンマナ」行の色指定とDesign Systemアーティファクトの色は旧版。書体は従来どおり
 
 ## コラム(記事)の足し方(2026-10-19〜)
