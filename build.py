@@ -437,7 +437,21 @@ def check(pages):
     return ng
 
 
+def indexnow(pages):
+    """IndexNow(Bing・ChatGPT検索など)に全URLの更新を通知する"""
+    import urllib.request
+    key = (ROOT / ".indexnow_key").read_text().strip()
+    urls = [SITE + m["path"] for m, _ in pages if not m.get("noindex")]
+    body = json.dumps({"host": "soi-co-ltd.com", "key": key, "keyLocation": f"{SITE}/{key}.txt", "urlList": urls}).encode()
+    req = urllib.request.Request("https://api.indexnow.org/indexnow", data=body,
+                                 headers={"Content-Type": "application/json; charset=utf-8"})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        print("IndexNow:", r.status, f"{len(urls)}件")
+
+
 if __name__ == "__main__":
     built = build()
+    if "--indexnow" in sys.argv:
+        indexnow(built)
     if "--check" in sys.argv:
         sys.exit(1 if check(built) else 0)
