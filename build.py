@@ -342,6 +342,11 @@ def build():
     for src in sorted((ROOT / "src/pages").glob("*.html")):
         meta, content = read_page(src)
         items.append((meta, content, src))
+    # 専用ブランドのLPは、共通レイアウトを使わず独自のデザインで公開する。
+    for src in sorted((ROOT / "src/standalone").glob("*.html")):
+        meta, content = read_page(src)
+        meta["standalone"] = True
+        items.append((meta, content, src))
     items.append(column_index(arts))
     items += [article_page(a, arts) for a in arts]
     pages = []
@@ -352,7 +357,7 @@ def build():
         content = content.replace("{{mocks}}", MOCKS)
         for key in CATEGORIES:
             content = content.replace("{{columns:" + key + "}}", article_cards([a for a in arts if a["category"] == key][:3]))
-        html_out = layout
+        html_out = content if meta.get("standalone") else layout
         repl = {
             "title": meta["title"],
             "og_title": meta.get("og_title", meta["title"]),

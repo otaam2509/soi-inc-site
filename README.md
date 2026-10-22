@@ -41,3 +41,12 @@
 - 書き方の約束: 一般論＋「SOIの考え方」(自社の実際のやり方)。統計・事例・数値成果は出典か実物がない限り書かない。recruit の記事に「AI」「ドラマ」「架空」は書かない(点検でNGになる)
 - **採用ページの写真(2026-10-19 志弥指示「取り急ぎAIで」)**: `assets/recruit/*.jpg` は Higgsfield gpt_image_2_5 で生成したイメージ写真(実在の職場・人物ではない)。ページ上は「※写真はイメージです」「撮影のイメージ」と表記(採用ページなので「AI」とは書かない)。実際の撮影写真が手に入ったら差し替える
 - **IndexNow**(Bing・ChatGPT検索などへの更新通知): 鍵ファイル=ルートの `<鍵>.txt`(鍵は `.indexnow_key`)。ページを足したら `python3 build.py --indexnow` で全URLを通知
+
+## ツイミル専用LP（2026-10-22）
+
+- 公開URL: https://soi-co-ltd.com/tsuimiru/
+- 本文: `src/standalone/tsuimiru.html`。独自デザインの完結したHTMLを格納し、`build.py` が `tsuimiru/index.html` を書き出してサイトマップ・点検に含める。
+- CSS/JS: `assets/tsuimiru/`。専用LINEは https://lin.ee/SC6LK06 。会社サイト共通LINEとは異なる。
+- 画像・動画: 公開済みの https://tsuimiru-studio.soiwedding2025.chatgpt.site/assets/ を参照。元のSitesは公開を維持すること。会社ドメイン版とSites版のHTMLは独立しているため、今後はこのURLを主導線とし、修正はこのリポジトリに反映する。
+- 左端の動画はユーザー指定「確認用_B案.MP4」から作成した `wedding-story-b.mp4`（55秒）。他3本も会社名を除いた制作サンプル。ウェディング業務の営業ページではなく、動画表現の制作サンプルとして掲載。
+- 会社トップのサービス欄と `/short-drama/` から導線を追加。LP末尾に運営会社とプライバシーポリシーへのリンクを設置。
