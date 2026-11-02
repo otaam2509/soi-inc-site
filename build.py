@@ -293,8 +293,8 @@ def article_page(a, arts):
     upd = f'<span>更新 <time datetime="{a["updated"]}">{a["updated"].replace("-", ".")}</time></span>' if a.get("updated") else ""
     if a["category"] == "drama":
         cta_title = "この考え方を、あなたの商品・サービスなら。"
-        cta_text = "企画が決まっていなくても大丈夫です。制作サンプルを見て、気になる方向をDMでお聞かせください。"
-        cta_links = '<a class="cta" href="/tsuimiru/#works">ツイミルの制作サンプルを見る</a><a class="cta ghost" href="https://ig.me/m/tsuimiru_aimovie" target="_blank" rel="noopener noreferrer" data-track="instagram_dm">DMに「相談」と送る</a>'
+        cta_text = "企画が決まっていなくても大丈夫です。制作サンプルを見て、公式LINEから申込フォームへお進みください。担当者がLINEでお返事します。"
+        cta_links = '<a class="cta" href="/tsuimiru/#works">ツイミルの制作サンプルを見る</a><a class="cta ghost" href="https://lin.ee/SC6LK06" target="_blank" rel="noopener noreferrer" data-track="line">公式LINEで相談・見積もり</a>'
         quick = '<a href="/tsuimiru/">ツイミルのサービス内容・制作サンプル →</a>'
     elif a["category"] == "recruit":
         cta_title = "御社の職場なら、何を撮るか。"
@@ -327,7 +327,7 @@ def article_page(a, arts):
         meta.update({"org_description": RECRUIT_ORG_DESC, "mail_service": "人材採用のSNS運用",
                      "contact_text": "御社のサイトや求人を拝見して、採用動画の企画案を先にお作りします。ここまで費用はかかりません。会社名と、募集している職種だけお送りください。"})
     elif a["category"] == "drama":
-        meta.update({"mail_service": "AIショートドラマ", "contact_channel": "dm"})
+        meta.update({"mail_service": "AIショートドラマ", "contact_channel": "tsuimiru_line"})
     return meta, content, a["src"]
 
 
@@ -397,12 +397,12 @@ def build():
         content = content.replace("{{mocks}}", MOCKS)
         for key in CATEGORIES:
             content = content.replace("{{columns:" + key + "}}", article_cards([a for a in arts if a["category"] == key][:3]))
-        use_dm = meta.get("contact_channel") == "dm" or meta["path"] == "/short-drama/"
-        if use_dm:
-            contact_heading = "動画制作の相談は、InstagramのDMへ"
-            contact_text = "まずは「相談」とひと言。企画や予算が未定でも大丈夫です。伝えたい魅力と動画の使い方から一緒に考えます。"
-            contact_actions = '<a class="cta cta-line" href="https://ig.me/m/tsuimiru_aimovie" target="_blank" rel="noopener noreferrer" data-track="instagram_dm">InstagramのDMで相談する</a><a class="cta ghost" href="/tsuimiru/#works">制作サンプルを見る</a>'
-            contact_note = 'DMが開かない場合は、<a href="https://www.instagram.com/tsuimiru_aimovie/" target="_blank" rel="noopener noreferrer" data-track="instagram_profile">ツイミルのプロフィール</a>の「メッセージ」からお送りください。'
+        use_tsuimiru_line = meta.get("contact_channel") == "tsuimiru_line" or meta["path"] == "/short-drama/"
+        if use_tsuimiru_line:
+            contact_heading = "動画制作の相談・お見積もりは、公式LINEへ"
+            contact_text = "友だち追加後、申込フォームにわかる範囲でご入力ください。企画や予算が未定でも大丈夫です。担当者がLINEでお返事します。"
+            contact_actions = '<a class="cta cta-line" href="https://lin.ee/SC6LK06" target="_blank" rel="noopener noreferrer" data-track="line">公式LINEで相談・見積もり</a><a class="cta ghost" href="/tsuimiru/#works">制作サンプルを見る</a>'
+            contact_note = '必須項目は、お名前・LINE表示名・相談内容の3つです。フォーム送信だけで発注・料金は発生しません。'
         else:
             contact_heading = "無料で、企画案をお作りします"
             contact_text = meta.get("contact_text", CONTACT_TEXT_DEFAULT)

@@ -39,15 +39,15 @@
   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&menuButton.getAttribute('aria-expanded')==='true'){menuButton.setAttribute('aria-expanded','false');$('#main-nav').classList.remove('is-open');menuButton.focus();}});
   const sampleVideos = [...document.querySelectorAll('.work-card video')];
   sampleVideos.forEach(video => video.addEventListener('play', () => sampleVideos.forEach(other => { if(other !== video) other.pause(); })));
-  let dmUrl = null;
+  let lineUrl = null;
   try {
-    const candidate = new URL(window.TSUIMIRU_CONFIG?.dmUrl || '');
-    if (candidate.protocol === 'https:' && candidate.hostname === 'ig.me' && candidate.pathname === '/m/tsuimiru_aimovie') dmUrl = candidate.href;
+    const candidate = new URL(window.TSUIMIRU_CONFIG?.lineUrl || '');
+    if (candidate.protocol === 'https:' && candidate.hostname === 'lin.ee' && candidate.pathname === '/SC6LK06') lineUrl = candidate.href;
   } catch {}
-  document.querySelectorAll('[data-dm-link]').forEach(link => {
-    if (dmUrl) link.href = dmUrl;
+  document.querySelectorAll('[data-line-link]').forEach(link => {
+    if (lineUrl) link.href = lineUrl;
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
-    link.setAttribute('aria-label', 'InstagramのDMで制作を相談する');
+    link.setAttribute('aria-label', '公式LINEで相談・見積もり');
   });
 })();

@@ -1,3 +1,3 @@
 window.TSUIMIRU_CONFIG = {
-  dmUrl: "https://ig.me/m/tsuimiru_aimovie",
+  lineUrl: "https://lin.ee/SC6LK06",
 };
