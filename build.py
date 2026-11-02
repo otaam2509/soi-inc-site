@@ -19,6 +19,7 @@ src/pages/*.html(各ページの本文)を差し込んで、公開用のHTMLを�
 """
 import datetime
 import html
+import hashlib
 import json
 import re
 import sys
@@ -29,7 +30,9 @@ from urllib.parse import quote
 
 ROOT = Path(__file__).resolve().parent
 SITE = "https://soi-co-ltd.com"
-VERSION = datetime.date.today().strftime("%Y%m%d")
+# Invalidate cached styles/scripts even when multiple releases occur on the same day.
+VERSION = hashlib.sha256(b"".join(p.read_bytes() for p in sorted((ROOT / "assets").rglob("*"))
+                                 if p.suffix in {".css", ".js"})).hexdigest()[:12]
 # 相談の窓口=代表 玉手志弥の公式LINE(あいさつ文から面談予約へ。2026-10-20 志弥指示でフォームの代わりに)
 LINE_URL = "https://lin.ee/TMkuCTn"  # LINE公式マネージャー「友だち追加用URL」(2026-10-20取得)
 GA_ID = "G-GR6X7ZXK0D"  # Googleアナリティクス(2026-10-20作成・info@soi-co-ltd.com)
@@ -65,7 +68,7 @@ MENU = [
 # コラムの分類(キー: 表示名, 関連サービスのパス, 関連サービス名)
 CATEGORIES = {
     "recruit": ("採用・求人", "/recruit/", "人材採用のSNS運用"),
-    "drama": ("ショートドラマ・動画", "/short-drama/", "AIショートドラマの制作・運用"),
+    "drama": ("ショートドラマ・動画", "/tsuimiru/", "AI動画制作・ショートドラマ「ツイミル」"),
     "general": ("SNS・動画運用", "/", "株式会社SOIのサービス"),
 }
 
@@ -91,7 +94,7 @@ ORG = {
         "streetAddress": "戸越5-18-16-2F",
         "addressCountry": "JP",
     },
-    "founder": {"@type": "Person", "@id": SITE + "/company/#tamate", "name": "玉手志弥", "alternateName": "Yukiya Tamate",
+    "founder": {"@type": "Person", "@id": SITE + "/company/#about", "name": "玉手志弥", "alternateName": "Yukiya Tamate",
                 "jobTitle": "代表取締役", "url": SITE + "/company/#about"},
     "knowsAbout": ["採用動画", "人材採用のSNS運用", "縦型ショート動画", "AIショートドラマ", "映像制作", "公式LINE運用"],
 }
@@ -136,6 +139,11 @@ def jsonld(meta, content):
             "description": meta["description"], "inLanguage": "ja", "isPartOf": {"@id": SITE + "/#website"},
             "about": {"@id": SITE + "/#org"}}
     graph.append(page)
+    if meta["path"] == "/company/":
+        graph.append({"@type": "Person", "@id": SITE + "/company/#about", "name": "玉手志弥",
+                      "alternateName": "Yukiya Tamate", "jobTitle": "代表取締役・フォトグラファー",
+                      "url": SITE + "/company/#about", "image": SITE + "/assets/president.jpg",
+                      "worksFor": {"@id": SITE + "/#org"}})
     if meta["path"] != "/":
         trail = [("トップ", "/")] + meta.get("parents", []) + [(meta["crumb"], meta["path"])]
         crumbs = [{"@type": "ListItem", "position": i + 1, "name": n, "item": SITE + h} for i, (n, h) in enumerate(trail)]
@@ -145,7 +153,7 @@ def jsonld(meta, content):
         graph.append({"@type": "BlogPosting", "@id": url + "#article", "headline": meta["h1"], "description": meta["description"],
                       "datePublished": a["date"], "dateModified": a.get("updated", a["date"]), "inLanguage": "ja",
                       "mainEntityOfPage": {"@id": url + "#webpage"}, "image": SITE + "/assets/og.jpg",
-                      "author": {"@id": SITE + "/#org"}, "publisher": {"@id": SITE + "/#org"},
+                      "author": {"@type": "Organization", "@id": SITE + "/#org", "name": "株式会社SOI", "url": SITE + "/company/#editorial-policy"}, "publisher": {"@id": SITE + "/#org"},
                       "articleSection": CATEGORIES[a["category"]][0]})
     if meta.get("service"):
         s = dict(meta["service"])
@@ -269,32 +277,49 @@ def article_cards(arts):
 
 def article_page(a, arts):
     cat, svc_path, svc_name = CATEGORIES[a["category"]]
+    related_slugs = {
+        "recruit": ["recruit-sns-agency", "care-rpo-or-sns", "recruit-video-basics", "recruit-measure-results"],
+        "drama": ["short-drama-production-company", "drama-script-structure", "drama-ai-quality-check", "drama-not-ai-looking"],
+        "general": ["sns-hook-first-seconds", "sns-keep-posting-ledger", "sns-metrics-saves"],
+    }
+    pool = [x for x in arts if x["category"] == a["category"] and x["slug"] != a["slug"]]
+    ordered = [x for slug in related_slugs[a["category"]] for x in pool if x["slug"] == slug]
+    related = (ordered + [x for x in pool if x not in ordered])[:3]
+    rel = f'<section class="tint-sand"><div class="wrap"><div class="kicker"><span class="en">Column</span>あわせて読みたい</div>{article_cards(related)}</div></section>' if related else ""
     toc = ""
     if len(a["toc"]) >= 2:
         toc = ('<div class="toc" role="navigation" aria-label="目次"><b>目次</b><ul>' +
                "".join(f'<li><a href="#s{i + 1}">{inline_md(t)}</a></li>' for i, t in enumerate(a["toc"])) + "</ul></div>")
     upd = f'<span>更新 <time datetime="{a["updated"]}">{a["updated"].replace("-", ".")}</time></span>' if a.get("updated") else ""
-    related = [x for x in arts if x["category"] == a["category"] and x["slug"] != a["slug"]][:3]
-    rel = f'<section class="tint-sand"><div class="wrap"><div class="kicker"><span class="en">Column</span>あわせて読みたい</div>{article_cards(related)}</div></section>' if related else ""
-    content = f"""<header class="page-hero">
-  <div class="wrap">
+    if a["category"] == "drama":
+        cta_title = "この考え方を、あなたの商品・サービスなら。"
+        cta_text = "企画が決まっていなくても大丈夫です。制作サンプルを見て、気になる方向をDMでお聞かせください。"
+        cta_links = '<a class="cta" href="/tsuimiru/#works">ツイミルの制作サンプルを見る</a><a class="cta ghost" href="https://ig.me/m/tsuimiru_aimovie" target="_blank" rel="noopener noreferrer" data-track="instagram_dm">DMに「相談」と送る</a>'
+        quick = '<a href="/tsuimiru/">ツイミルのサービス内容・制作サンプル →</a>'
+    elif a["category"] == "recruit":
+        cta_title = "御社の職場なら、何を撮るか。"
+        cta_text = "会社名と募集職種をもとに、採用動画の企画案を無料でお作りします。投稿や応募窓口まで相談できます。"
+        cta_links = f'<a class="cta" href="/recruit/">SNS採用代行の範囲を見る</a><a class="cta ghost" href="{LINE_URL}" data-track="line">LINEで企画案を相談する</a>'
+        quick = '<a href="/recruit/video/">採用動画の制作内容・流れを見る →</a>'
+    else:
+        cta_title = "動画を、誰に何のために届けるか。"
+        cta_text = "職場を伝える採用動画と、商品・サービスの魅力を伝える映像。目的に近いサービスをご覧ください。"
+        cta_links = '<a class="cta" href="/recruit/">採用動画・SNS運用を相談する</a><a class="cta ghost" href="/tsuimiru/">ツイミルの動画制作を相談する</a>'
+        quick = '<a href="/recruit/">採用動画・SNS運用</a><span aria-hidden="true"> ／ </span><a href="/tsuimiru/">ツイミルの動画制作</a>'
+    author = ('<aside class="article-author" aria-label="記事の制作・運営情報"><p class="author-label">執筆・編集：株式会社SOI</p>'
+              '<p>東京都品川区の映像制作会社。現場での撮影・編集と、企業の動画発信に関する考え方をまとめています。</p>'
+              '<p>代表：玉手志弥（フォトグラファー）。<a href="/company/#about">代表紹介</a>・<a href="/company/#editorial-policy">記事の編集方針</a></p></aside>')
+    content = f"""<header class="page-hero"><div class="wrap">
     {{{{crumbs}}}}
-    <div class="post-meta"><span class="cat">{cat}</span><span>公開 <time datetime="{a["date"]}">{a["date"].replace("-", ".")}</time></span>{upd}</div>
-    <h1>{html.escape(a["title"])}</h1>
-    <p class="lead">{html.escape(a["description"])}</p>
-  </div>
-</header>
-
-<section><div class="wrap">
-  <article class="prose post-body">
-{toc}
-{a["body"]}
-  </article>
-  <div class="post-cta"><b>{svc_name}について</b><span>この記事の内容を、御社の場合にあてはめた企画案を無料でお作りします。</span>
-    <div class="ctas"><a class="cta" href="{svc_path}">{svc_name}を見る</a><a class="cta ghost" href="#contact">無料で相談する</a></div></div>
-  <p class="byline">文・株式会社SOI（東京・品川の映像制作会社）</p>
-</div></section>
-{rel}"""
+    <div class="post-meta"><span class="cat">{cat}</span><span>公開 <time datetime="{a['date']}">{a['date'].replace('-', '.')}</time></span>{upd}</div>
+    <h1>{html.escape(a['title'])}</h1><p class="lead">{html.escape(a['description'])}</p>
+    <p class="article-credit">執筆・編集：<a href="/company/#editorial-policy">株式会社SOI</a></p>
+    <div class="article-service-link">{quick}</div>
+</div></header>
+<section><div class="wrap"><article class="prose post-body">{toc}{a['body']}</article>
+  <div class="post-cta"><b>{cta_title}</b><span>{cta_text}</span><div class="ctas">{cta_links}</div></div>
+  {author}
+</div></section>{rel}"""
     meta = {"path": a["path"], "crumb": a["title"], "parents": [("コラム", "/column/")], "h1": a["title"],
             "title": a["title"] + "｜株式会社SOI コラム", "description": a["description"],
             "article": {"date": a["date"], "updated": a.get("updated") or a["date"], "category": a["category"]}}
@@ -302,12 +327,12 @@ def article_page(a, arts):
         meta.update({"org_description": RECRUIT_ORG_DESC, "mail_service": "人材採用のSNS運用",
                      "contact_text": "御社のサイトや求人を拝見して、採用動画の企画案を先にお作りします。ここまで費用はかかりません。会社名と、募集している職種だけお送りください。"})
     elif a["category"] == "drama":
-        meta.update({"mail_service": "AIショートドラマ"})
+        meta.update({"mail_service": "AIショートドラマ", "contact_channel": "dm"})
     return meta, content, a["src"]
 
 
 def column_index(arts):
-    meta = {"path": "/column/", "crumb": "コラム", "schema_type": "CollectionPage",
+    meta = {"path": "/column/", "crumb": "コラム", "schema_type": "CollectionPage", "updated": "2026-11-02",
             "title": "コラム｜採用動画・SNS運用・ショートドラマの考え方｜株式会社SOI",
             "description": "採用動画やSNS運用、商品を物語で見せるショートドラマについて、一般的な基本と、映像制作の現場で私たちが大切にしている考え方をまとめています。"}
     groups = "".join(
@@ -323,6 +348,12 @@ def column_index(arts):
 </header>
 
 <section><div class="wrap">
+  <div class="topic-guide"><h2>検討中のテーマから読む</h2><div class="topic-grid">
+  <a href="/column/recruit-sns-agency/"><span>採用担当者の方へ</span><b>SNS採用代行、何を任せる？</b><small>業務範囲と見積もりの条件 →</small></a>
+  <a href="/recruit/video/"><span>採用動画を作りたい方へ</span><b>職場で何を撮る？</b><small>撮影内容・制作の流れ →</small></a>
+  <a href="/column/care-rpo-or-sns/"><span>介護施設の採用でお困りの方へ</span><b>採用代行とSNSの違いは？</b><small>必要な支援を選ぶ →</small></a>
+  <a href="/column/short-drama-production-company/"><span>商品・サービスを伝えたい方へ</span><b>制作会社をどう選ぶ？</b><small>企画・品質・見積もりの確認 →</small></a>
+  </div></div>
   <h2 class="cat-h">新着</h2>
   {article_cards(arts[:6])}
   {groups}
@@ -366,6 +397,17 @@ def build():
         content = content.replace("{{mocks}}", MOCKS)
         for key in CATEGORIES:
             content = content.replace("{{columns:" + key + "}}", article_cards([a for a in arts if a["category"] == key][:3]))
+        use_dm = meta.get("contact_channel") == "dm" or meta["path"] == "/short-drama/"
+        if use_dm:
+            contact_heading = "動画制作の相談は、InstagramのDMへ"
+            contact_text = "まずは「相談」とひと言。企画や予算が未定でも大丈夫です。伝えたい魅力と動画の使い方から一緒に考えます。"
+            contact_actions = '<a class="cta cta-line" href="https://ig.me/m/tsuimiru_aimovie" target="_blank" rel="noopener noreferrer" data-track="instagram_dm">InstagramのDMで相談する</a><a class="cta ghost" href="/tsuimiru/#works">制作サンプルを見る</a>'
+            contact_note = 'DMが開かない場合は、<a href="https://www.instagram.com/tsuimiru_aimovie/" target="_blank" rel="noopener noreferrer" data-track="instagram_profile">ツイミルのプロフィール</a>の「メッセージ」からお送りください。'
+        else:
+            contact_heading = "無料で、企画案をお作りします"
+            contact_text = meta.get("contact_text", CONTACT_TEXT_DEFAULT)
+            contact_actions = f'<a class="cta cta-line" href="{LINE_URL}" data-track="line">{{{{icon:chat}}}}公式LINEで相談する</a><a class="cta ghost" href="{mailto(meta.get("mail_service", "人材採用のSNS運用／AIショートドラマ"))}" data-track="mail">メールで相談する</a>'
+            contact_note = 'LINEは代表の玉手が直接お返事します。オンライン面談（30分〜）のご予約もLINEからどうぞ。<br>メールの場合は info@soi-co-ltd.com へ'
         html_out = content if meta.get("standalone") else layout
         repl = {
             "title": meta["title"],
@@ -373,14 +415,17 @@ def build():
             "description": meta["description"],
             "url": SITE + meta["path"],
             "site": SITE,
-            "og_type": "website",
+            "og_type": "article" if meta.get("article") else "website",
             "robots": "noindex" if meta.get("noindex") else "index,follow,max-image-preview:large",
             "version": VERSION,
             "jsonld": "" if meta.get("noindex") else jsonld(meta, content),
             "nav": menu_links(meta["path"]),
             "footnav": menu_links(meta["path"], footer=True),
             "mailto": mailto(meta.get("mail_service", "人材採用のSNS運用／AIショートドラマ")),
-            "contact_text": meta.get("contact_text", CONTACT_TEXT_DEFAULT),
+            "contact_text": contact_text,
+            "contact_heading": contact_heading,
+            "contact_actions": contact_actions,
+            "contact_note": contact_note,
             "line_url": LINE_URL,
             "ga_id": GA_ID,
             "content": content.strip(),

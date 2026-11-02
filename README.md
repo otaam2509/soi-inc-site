@@ -2,7 +2,7 @@
 
 - 公開先: https://soi-co-ltd.com/ （2026-10-19取得・Squarespace Domains。GitHub otaam2509/soi-inc-site の main を GitHub Pages で配信・`CNAME`ファイルで独自ドメイン化。旧URL otaam2509.github.io/soi-inc-site/ は自動で転送）
 - 連絡先: info@soi-co-ltd.com
-- 構成(2026-10-19 複数ページ化): **編集するのは `src/` だけ**。`python3 build.py --check` で公開用HTMLを書き出し＋点検(リンク切れ・alt・h1・構造化データ)。書き出したファイル(index.html・recruit/・short-drama/・company/・privacy/・404.html・sitemap.xml)もコミットする(GitHub Pagesはそのまま配信)
+- 構成(2026-10-19 複数ページ化): **本文は `src/`、見た目・動作は `assets/`、組み立て処理は `build.py` を編集**。`python3 build.py --check` で公開用HTMLを書き出し＋点検(リンク切れ・alt・h1・構造化データ)。書き出したファイル(index.html・recruit/・short-drama/・company/・privacy/・404.html・sitemap.xml)もコミットする(GitHub Pagesはそのまま配信)
   - `src/layout.html` = 全ページ共通(head・メニュー・お問い合わせ帯・フッター) / `src/pages/*.html` = 各ページ本文。先頭の `<!--page {...}-->` に題名・説明文・パス等
   - `assets/css/site.css` = 見た目(色は冒頭 :root だけ触る) / `assets/js/site.js` = 動画の自動再生
   - FAQは `<details class="q"><summary>質問</summary><div class="a">答え</div></details>` で書けば、検索向けFAQ構造化データに自動変換
@@ -18,7 +18,7 @@
 - トンマナの正本(2026-10-14): https://claude.ai/artifact/WsZggfk4zjNnpFFCTMg5dt (Design System。色・書体・言葉・形・写真・部品見本)。金は3段=gold(濃い地の上と差し線)/gold-deep #927642(白・紙の上の大きな数字)/gold-text #6f5a32(紙・砂の上の小さな文字)。紙色の上にgoldの文字は置かない(2.1:1で読めない)
 
 - 採用ページ(/recruit/)は本文・構造化データ・メール下書きにも「AI」「ドラマ」「架空」を出さない(build.pyの org_description / mail_service で切替)。お問い合わせ帯の文はページごとに front matter の contact_text
-- 相談の窓口 = 代表 玉手志弥の公式LINE @217ombzj(build.py の LINE_URL・2026-10-20 志弥指示でフォームは作らずLINEへ。面談予約はLINEのあいさつ文から)
+- 採用支援の相談窓口 = 代表 玉手志弥の公式LINE @217ombzj(build.py の LINE_URL・2026-10-20 志弥指示でフォームは作らずLINEへ。面談予約はLINEのあいさつ文から)
 - **色(2026-10-19 志弥指示で変更)**: 「くすんで暗い」→ **アースグリーン #3f6f4a 1色＋白**のクリーンな配色に。濃い帯(理念・お問い合わせ以外)は廃止、薄い緑 #f4f8f3 の地＋白い箱。金・海色・紙色は使わない(変数名 --gold 等は互換のため残し、中身は緑)。上の「トンマナ」行の色指定とDesign Systemアーティファクトの色は旧版。書体は従来どおり
 
 ## コラム(記事)の足し方(2026-10-19〜)
@@ -51,3 +51,15 @@
 - 左端の動画はユーザー指定「確認用_B案.MP4」から作成した `wedding-story-b.mp4`（55秒）。他3本も会社名を除いた制作サンプル。ウェディング業務の営業ページではなく、動画表現の制作サンプルとして掲載。
 - 共通メニュー・会社トップ・ `/short-drama/` から導線を設置。会社トップにはロゴ・制作サンプル動画を埋め込んだ紹介セクションを設置。LP末尾に運営会社とプライバシーポリシーへのリンク。
 - 検索向け設定: LPのタイトル・説明・H1にサービス名とAI動画制作を明示。canonicalはSOIドメイン版、WebPage/Service/BreadcrumbList構造化データを設定。更新時はfront matterの `updated` を変更し、sitemapの実際の更新日を保つ。
+
+
+## SEO調査レポートへの対応（2026-11-02）
+
+- `/recruit/` は「SNS採用代行」、`/recruit/video/` は「採用動画制作」、`/recruit/kaigo/` は介護施設向けの撮影・SNS支援を説明。RPO全般をSOIの提供サービスとして表記しない。
+- 比較検討向けに `recruit-sns-agency`、`care-rpo-or-sns`、`short-drama-production-company` の3記事を追加。コラム一覧のテーマ別入口と関連リンクから案内。
+- 全記事に「執筆・編集：株式会社SOI」と編集方針へのリンクを表示。代表紹介を添えるが、本人の執筆・監修は確認できる場合のみ明記する。
+- ツイミル、ショートドラマページと該当カテゴリの記事はInstagram DMへ案内する。採用支援のLINEと混同しない。
+- GA4は既存プロパティを利用し、ツイミルにも同じ計測を追加。`assets/js/measurement.js` の `contact_click` は窓口リンクのクリック、`select_content` は記事・サービスへの移動。メッセージ本文やリンクのクエリ文字列をイベントに送らない。
+- 旧 `generate_lead` のクリック計測は廃止。`contact_click` を受信済み問い合わせと数えない。実際のDM・LINE・メールの相談、商談、契約は受信記録で別集計する。GA4上の既存 `generate_lead` 履歴との単純な前後比較はしない。
+- スクリプト・CSSのキャッシュ更新用番号は内容のハッシュを使い、同日の再公開にも対応。
+- 検索順位・AI引用・問い合わせ数は保証しない。実績や被リンクは確認済みの掲載許可・関係先に基づいて増やす。
