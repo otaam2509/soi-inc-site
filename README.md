@@ -46,7 +46,7 @@
 
 - 公開URL: https://soi-co-ltd.com/tsuimiru/
 - 本文: `src/standalone/tsuimiru.html`。独自デザインの完結したHTMLを格納し、`build.py` が `tsuimiru/index.html` を書き出してサイトマップ・点検に含める。
-- CSS/JS・画像・動画: `assets/tsuimiru/`。ツイミルの相談先は公式LINE（https://lin.ee/SC6LK06）→申込フォーム（https://forms.gle/fdM71sJyKk7cqgmX9）→LINE返信。会社サイト共通のLINEとは別に管理する。
+- CSS/JS・画像・動画: `assets/tsuimiru/`。ツイミルの相談先は公式LINE（https://lin.ee/SC6LK06）→申込フォーム（https://forms.gle/fdM71sJyKk7cqgmX9）→30分のTimeRex予約（https://timerex.net/s/otama2509_3ae3/2b3057e4）→Google Meet。予約確認・前日のリマインドはメール。会社サイト共通のLINEとは別に管理する。
 - 画像・動画はSOI側で配信（2026-11-02）。元のSites配信には依存しない。会社ドメイン版とSites版のHTMLは独立しているため、このURLを主導線とし、修正はこのリポジトリに反映する。
 - 左端の動画はユーザー指定「確認用_B案.MP4」から作成した `wedding-story-b.mp4`（55秒）。他3本も会社名を除いた制作サンプル。ウェディング業務の営業ページではなく、動画表現の制作サンプルとして掲載。
 - 共通メニュー・会社トップ・ `/short-drama/` から導線を設置。会社トップにはロゴ・制作サンプル動画を埋め込んだ紹介セクションを設置。LP末尾に運営会社とプライバシーポリシーへのリンク。

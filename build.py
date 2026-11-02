@@ -293,7 +293,7 @@ def article_page(a, arts):
     upd = f'<span>更新 <time datetime="{a["updated"]}">{a["updated"].replace("-", ".")}</time></span>' if a.get("updated") else ""
     if a["category"] == "drama":
         cta_title = "この考え方を、あなたの商品・サービスなら。"
-        cta_text = "企画が決まっていなくても大丈夫です。制作サンプルを見て、公式LINEから申込フォームへお進みください。担当者がLINEでお返事します。"
+        cta_text = "企画が決まっていなくても大丈夫です。制作サンプルを見て、公式LINEから申込フォームへお進みください。フォーム回答後、そのまま30分のオンライン相談を予約できます。"
         cta_links = '<a class="cta" href="/tsuimiru/#works">ツイミルの制作サンプルを見る</a><a class="cta ghost" href="https://lin.ee/SC6LK06" target="_blank" rel="noopener noreferrer" data-track="line">公式LINEで相談・見積もり</a>'
         quick = '<a href="/tsuimiru/">ツイミルのサービス内容・制作サンプル →</a>'
     elif a["category"] == "recruit":
@@ -400,7 +400,7 @@ def build():
         use_tsuimiru_line = meta.get("contact_channel") == "tsuimiru_line" or meta["path"] == "/short-drama/"
         if use_tsuimiru_line:
             contact_heading = "動画制作の相談・お見積もりは、公式LINEへ"
-            contact_text = "友だち追加後、申込フォームにわかる範囲でご入力ください。企画や予算が未定でも大丈夫です。担当者がLINEでお返事します。"
+            contact_text = "友だち追加後、申込フォームにわかる範囲でご入力ください。企画や予算が未定でも大丈夫です。フォーム回答後、そのまま30分のオンライン相談を予約できます。"
             contact_actions = '<a class="cta cta-line" href="https://lin.ee/SC6LK06" target="_blank" rel="noopener noreferrer" data-track="line">公式LINEで相談・見積もり</a><a class="cta ghost" href="/tsuimiru/#works">制作サンプルを見る</a>'
             contact_note = '必須項目は、お名前・LINE表示名・相談内容の3つです。フォーム送信だけで発注・料金は発生しません。'
         else:
