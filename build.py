@@ -24,6 +24,7 @@ import re
 import sys
 from pathlib import Path
 import urllib.parse
+import xml.etree.ElementTree as ET
 from urllib.parse import quote
 
 ROOT = Path(__file__).resolve().parent
@@ -56,6 +57,7 @@ CONTACT_TEXT_DEFAULT = ("御社のサイトを拝見して、採用のSNS運用�
 MENU = [
     ("採用SNS運用", "/recruit/"),
     ("AIショートドラマ", "/short-drama/"),
+    ("ツイミル", "/tsuimiru/"),
     ("コラム", "/column/"),
     ("会社概要", "/company/"),
 ]
@@ -336,6 +338,13 @@ def out_path(meta, src):
 
 
 def build():
+    # File mtimes change when cloning. Keep actual content-update dates in the sitemap.
+    previous_dates = {}
+    sitemap_path = ROOT / "sitemap.xml"
+    if sitemap_path.exists():
+        ns = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+        for entry in ET.parse(sitemap_path).findall("s:url", ns):
+            previous_dates[entry.findtext("s:loc", namespaces=ns)] = entry.findtext("s:lastmod", namespaces=ns)
     layout = (ROOT / "src/layout.html").read_text(encoding="utf-8")
     arts = read_articles()
     items = []
@@ -382,7 +391,11 @@ def build():
         dst = out_path(meta, src)
         dst.parent.mkdir(parents=True, exist_ok=True)
         dst.write_text(html_out, encoding="utf-8")
-        meta["_lastmod"] = datetime.date.fromtimestamp(src.stat().st_mtime).isoformat()
+        article = meta.get("article", {})
+        meta["_lastmod"] = (meta.get("updated") or article.get("updated") or article.get("date")
+                            or previous_dates.get(SITE + meta["path"])
+                            or datetime.date.fromtimestamp(src.stat().st_mtime).isoformat())
+        datetime.date.fromisoformat(meta["_lastmod"])
         pages.append((meta, dst))
         print("書き出し:", dst.relative_to(ROOT))
 

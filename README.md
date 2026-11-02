@@ -46,7 +46,8 @@
 
 - 公開URL: https://soi-co-ltd.com/tsuimiru/
 - 本文: `src/standalone/tsuimiru.html`。独自デザインの完結したHTMLを格納し、`build.py` が `tsuimiru/index.html` を書き出してサイトマップ・点検に含める。
-- CSS/JS: `assets/tsuimiru/`。専用LINEは https://lin.ee/SC6LK06 。会社サイト共通LINEとは異なる。
-- 画像・動画: 公開済みの https://tsuimiru-studio.soiwedding2025.chatgpt.site/assets/ を参照。元のSitesは公開を維持すること。会社ドメイン版とSites版のHTMLは独立しているため、今後はこのURLを主導線とし、修正はこのリポジトリに反映する。
+- CSS/JS・画像・動画: `assets/tsuimiru/`。ツイミルの相談先はInstagram DM（https://ig.me/m/tsuimiru_aimovie）。会社サイト共通のLINEとは別に管理する。
+- 画像・動画はSOI側で配信（2026-11-02）。元のSites配信には依存しない。会社ドメイン版とSites版のHTMLは独立しているため、このURLを主導線とし、修正はこのリポジトリに反映する。
 - 左端の動画はユーザー指定「確認用_B案.MP4」から作成した `wedding-story-b.mp4`（55秒）。他3本も会社名を除いた制作サンプル。ウェディング業務の営業ページではなく、動画表現の制作サンプルとして掲載。
-- 会社トップのサービス欄と `/short-drama/` から導線を追加。LP末尾に運営会社とプライバシーポリシーへのリンクを設置。
+- 共通メニュー・会社トップ・ `/short-drama/` から導線を設置。会社トップにはロゴ・制作サンプル動画を埋め込んだ紹介セクションを設置。LP末尾に運営会社とプライバシーポリシーへのリンク。
+- 検索向け設定: LPのタイトル・説明・H1にサービス名とAI動画制作を明示。canonicalはSOIドメイン版、WebPage/Service/BreadcrumbList構造化データを設定。更新時はfront matterの `updated` を変更し、sitemapの実際の更新日を保つ。

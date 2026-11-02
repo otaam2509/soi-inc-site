@@ -22,3 +22,7 @@ body{font-size:16px}.hero{grid-template-columns:1.6fr 1fr;align-items:start;padd
 
 /* DM consultation: keep the first message simple. */
 .hero-contact-note{font-size:13px;line-height:1.8;margin-top:14px;color:var(--muted)}.contact-fallback{font-size:12px;line-height:1.8;margin-top:16px;max-width:330px;color:#e5eceb}.contact-fallback a{text-decoration:underline;text-underline-offset:3px}.button-dm{background:var(--coral);color:var(--ink)}
+
+/* Search visitors can identify the service before reading the campaign copy. */
+.brand-crumbs{display:flex;flex-wrap:wrap;gap:8px 12px;font-size:11px;color:var(--muted);padding-top:14px}.brand-crumbs a{text-decoration:underline;text-underline-offset:3px}.hero h1 .hero-service{display:block;font-size:18px;line-height:1.7;letter-spacing:.04em;margin-bottom:19px;font-weight:700}.ai-benefits{background:#fff}.ai-benefits h2{margin-top:24px}.ai-intro{max-width:770px;margin-top:24px;font-size:17px;line-height:2}.ai-footnote{max-width:850px;margin-top:34px;font-size:14px;color:var(--muted);line-height:2}.ai-benefits .problem-list h3{font-size:22px}
+@media(max-width:800px){.brand-crumbs{font-size:10px;padding-top:4px}.hero h1 .hero-service{font-size:16px;margin-bottom:18px;letter-spacing:0}.ai-intro{font-size:16px}.ai-footnote{font-size:13px}.ai-benefits .problem-list h3{font-size:23px}}
