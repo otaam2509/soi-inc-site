@@ -432,7 +432,7 @@ def build():
         if meta.get("contact_channel") == "service_choice":
             contact_heading = meta.get("contact_heading", "目的に合う窓口へ、ご相談ください")
             contact_text = meta.get("contact_text", CONTACT_TEXT_DEFAULT)
-            contact_actions = f'<a class="contact-choice" href="{LINE_URL}" data-track="line"><small>SNS採用代行・採用動画制作</small><strong>採用について相談する <span aria-hidden="true">↗</span></strong></a><a class="contact-choice choice-film" href="https://lin.ee/SC6LK06" target="_blank" rel="noopener noreferrer" data-track="line"><small>商品・サービスの動画制作</small><strong>ツイミルに相談する <span aria-hidden="true">↗</span></strong></a>'
+            contact_actions = f'<a class="contact-choice" href="{LINE_URL}" data-track="line" data-contact-service="recruit"><small>SNS採用代行・採用動画制作</small><strong>採用について相談する <span aria-hidden="true">↗</span></strong></a><a class="contact-choice choice-film" data-contact-service="tsuimiru" href="https://lin.ee/SC6LK06" target="_blank" rel="noopener noreferrer" data-track="line"><small>商品・サービスの動画制作</small><strong>ツイミルに相談する <span aria-hidden="true">↗</span></strong></a>'
             contact_note = f'採用のご相談は代表の玉手が対応。ツイミルはLINEの申込フォームからオンライン相談へ。<br>メールでのご相談：<a href="{mailto("採用支援／動画制作")}">info@soi-co-ltd.com</a>'
         elif use_tsuimiru_line:
             contact_heading = "動画制作の相談・お見積もりは、公式LINEへ"

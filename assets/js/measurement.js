@@ -13,7 +13,10 @@
     else if (url.hostname === 'ig.me' && url.pathname === '/m/tsuimiru_aimovie') method = 'instagram_dm';
     else if (link.hasAttribute('data-track') && link.getAttribute('data-track') === 'instagram_profile') method = 'instagram_profile';
     if (method) {
-      window.gtag('event', 'contact_click', {method: method, page_path: location.pathname});
+      var contact = {method: method, page_path: location.pathname};
+      var service = link.getAttribute('data-contact-service');
+      if (service === 'recruit' || service === 'tsuimiru') contact.service = service;
+      window.gtag('event', 'contact_click', contact);
       return;
     }
     if (url.origin !== location.origin || url.pathname === location.pathname) return;

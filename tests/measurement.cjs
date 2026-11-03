@@ -8,8 +8,9 @@ const page = new URL('https://soi-co-ltd.com/tsuimiru/?private_query=excluded');
 const scope = {URL, location: page, window: {gtag: (...args) => events.push(args)},
   document: {addEventListener: (name, handler) => { assert.equal(name, 'click'); onClick = handler; }}};
 vm.runInNewContext(code, scope);
-function click(href, track) {
-  const link = {href, hasAttribute: () => Boolean(track), getAttribute: () => track};
+function click(href, track, service) {
+  const attrs = {'data-track': track, 'data-contact-service': service};
+  const link = {href, hasAttribute: name => Boolean(attrs[name]), getAttribute: name => attrs[name]};
   onClick({target: {closest: () => link}});
 }
 click('https://ig.me/m/tsuimiru_aimovie');
@@ -27,11 +28,16 @@ click('#contact');
 click('https://example.com/recruit/');
 click('https://ig.me/m/another-account');
 assert.equal(events.length, 6);
+click('https://lin.ee/TMkuCTn', 'line', 'recruit');
+click('https://lin.ee/SC6LK06', 'line', 'tsuimiru');
+click('https://lin.ee/SC6LK06', 'line', 'private-service-value');
+assert.deepEqual(events.slice(6).map(e => e[2].service), ['recruit', 'tsuimiru', undefined]);
+assert.equal(events.length, 9);
 onClick({target: {closest: () => null}});
 scope.window.gtag = undefined;
 click('https://ig.me/m/tsuimiru_aimovie');
-assert.equal(events.length, 6);
+assert.equal(events.length, 9);
 assert.ok(!JSON.stringify(events).includes('private'));
 assert.ok(!JSON.stringify(events).includes('example@example.com'));
 assert.ok(!JSON.stringify(events).includes('generate_lead'));
-console.log('PASS: DM/LINE/mail/profile, internal routes, no private query/body, safe without analytics');
+console.log('PASS: contact methods, service attribution whitelist, internal routes, no private data, safe without analytics');
