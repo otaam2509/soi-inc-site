@@ -1,5 +1,9 @@
 // 制作例の動画: 画面に入ったら無音で再生、外れたら停止(通信量を抑える)
 (function(){
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+    document.querySelectorAll("video[autoplay]").forEach(function(v){v.autoplay=false;v.pause();v.controls=true;});
+    return;
+  }
   if(!("IntersectionObserver" in window)) return;
   var io=new IntersectionObserver(function(es){es.forEach(function(e){
     var v=e.target;

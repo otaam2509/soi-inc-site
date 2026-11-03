@@ -1,5 +1,14 @@
 # 株式会社SOI 会社サイト
 
+## 現在のデザイン（2026-11-03）
+
+- ユーザーの「ヒロメルと同じように」刷新する依頼に基づき、黒地・太いゴシック体・色面・写真を重ねた構成へ変更。下記の旧配色・旧書体ルールより、この項目を優先する。
+- SOIはライムグリーンと紫。共通の見た目は `assets/css/creative-20261103.css`、トップ本文は `src/pages/index.html`、メニューは `src/layout.html`。
+- ツイミルはコーラルと紫。見た目は `assets/tsuimiru/creative-20261103.css`、本文は `src/standalone/tsuimiru.html`。既存の4作品をトップ直下で紹介する。
+- 共通の文字帯・装飾の停止は `assets/js/creative-20261103.js`。OSの「視差効果を減らす」設定も尊重する。ツイミルの制作サンプル動画はユーザー操作で再生する。
+- SOIの下層ページにも書体・配色・ヘッダーを適用。記事本文、制作サンプルの注記、各サービスの相談窓口、予約導線、計測は維持。
+- 今後も `src/` と `assets/` を編集し、`python3 build.py --check` で生成HTMLを更新する。
+
 - 公開先: https://soi-co-ltd.com/ （2026-10-19取得・Squarespace Domains。GitHub otaam2509/soi-inc-site の main を GitHub Pages で配信・`CNAME`ファイルで独自ドメイン化。旧URL otaam2509.github.io/soi-inc-site/ は自動で転送）
 - 連絡先: info@soi-co-ltd.com
 - 構成(2026-10-19 複数ページ化): **本文は `src/`、見た目・動作は `assets/`、組み立て処理は `build.py` を編集**。`python3 build.py --check` で公開用HTMLを書き出し＋点検(リンク切れ・alt・h1・構造化データ)。書き出したファイル(index.html・recruit/・short-drama/・company/・privacy/・404.html・sitemap.xml)もコミットする(GitHub Pagesはそのまま配信)
