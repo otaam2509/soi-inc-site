@@ -138,6 +138,11 @@ def jsonld(meta, content):
     page = {"@type": meta.get("schema_type", "WebPage"), "@id": url + "#webpage", "url": url, "name": meta["title"],
             "description": meta["description"], "inLanguage": "ja", "isPartOf": {"@id": SITE + "/#website"},
             "about": {"@id": SITE + "/#org"}}
+    if meta.get("article_list"):
+        page["mainEntity"] = {"@type": "ItemList", "numberOfItems": len(meta["article_list"]),
+                              "itemListElement": [{"@type": "ListItem", "position": i + 1,
+                                                   "url": SITE + a["path"], "name": a["title"]}
+                                                  for i, a in enumerate(meta["article_list"])]}
     graph.append(page)
     if meta["path"] == "/company/":
         graph.append({"@type": "Person", "@id": SITE + "/company/#about", "name": "玉手志弥",
@@ -343,11 +348,11 @@ def article_page(a, arts):
     <p class="article-credit">執筆・編集：<a href="/company/#editorial-policy">株式会社SOI</a></p>
     <div class="article-service-link">{quick}</div>
 </div></header>
-<section><div class="wrap"><article class="prose post-body">{video}{toc}{a['body']}</article>
+<section class="article-reading"><div class="wrap"><article class="prose post-body">{toc}{video}{a['body']}</article>
   <div class="post-cta"><b>{cta_title}</b><span>{cta_text}</span><div class="ctas">{cta_links}</div></div>
-  {author}
+  {author}<a class="journal-back" href="/column/">← コラム一覧に戻る</a>
 </div></section>{rel}"""
-    meta = {"path": a["path"], "crumb": a["title"], "parents": [("コラム", "/column/")], "h1": a["title"],
+    meta = {"path": a["path"], "crumb": a["title"], "parents": [("コラム", "/column/")], "h1": a["title"], "body_class": "soi-site soi-article",
             "title": a["title"] + "｜株式会社SOI コラム", "description": a["description"],
             "article": {"date": a["date"], "updated": a.get("updated") or a["date"], "category": a["category"]}}
     if a.get('video_src'):
@@ -362,32 +367,93 @@ def article_page(a, arts):
     return meta, content, a["src"]
 
 
+JOURNAL_COVERS = {
+    "ai-image-video-hibiwa": ("5枚から、\nひとつの物語。", "film"),
+    "line-contact-measurement": ("クリックと、\n問い合わせ。", "measure"),
+    "recruit-sns-agency": ("採用の発信、\nどこまで任せる？", "photo"),
+    "care-rpo-or-sns": ("採用代行？\n採用SNS？", "split"),
+    "short-drama-production-company": ("作品だけで、\n選ばない。", "frames"),
+    "recruit-video-basics": ("職場の空気を、\n映す。", "photo"),
+    "recruit-sns-start": ("撮る前に、\n決めること。", "steps"),
+    "recruit-video-interview-style": ("その人の言葉で、\n職場を伝える。", "quote"),
+    "recruit-job-posting-3points": ("求人票の、\nその先へ。", "steps"),
+    "recruit-line-application": ("応募のあとの、\n最初の一言。", "quote"),
+    "recruit-interview-noshow": ("面接までを、\nつなぐ。", "steps"),
+    "recruit-retention-3timings": ("入社のあとも、\n声をかける。", "quote"),
+    "recruit-indeed-vs-sns": ("探す人と、\nまだ探さない人。", "split"),
+    "recruit-measure-results": ("採用の効果、\n何で測る？", "measure"),
+    "short-drama-scene": ("商品のある、\nひとつの場面。", "frames"),
+    "drama-script-structure": ("説明より、\n物語を。", "frames"),
+    "drama-ai-quality-check": ("1カットずつ、\n確かめる。", "frames"),
+    "drama-not-ai-looking": ("つくるのは、\n信頼感。", "split"),
+    "drama-expression-check": ("言い切る前に、\n立ち止まる。", "quote"),
+    "drama-analyze-winners": ("伸びた理由を、\n分解する。", "steps"),
+    "sns-clip-one-topic": ("1本に、\nひとつの話。", "frames"),
+    "sns-editing-review": ("仕上がりは、\n見返しで変わる。", "frames"),
+    "sns-telop-keywords": ("全部より、\n要点を。", "quote"),
+    "sns-metrics-saves": ("その数字は、\n何を表す？", "measure"),
+    "sns-hook-first-seconds": ("最初の数秒に、\n見る理由を。", "frames"),
+    "sns-keep-posting-ledger": ("続けるための、\n型と記録。", "steps"),
+    "photo-natural-expression": ("ポーズより、\n会話から。", "photo"),
+}
+
+
+def journal_card(a):
+    label, motif = JOURNAL_COVERS.get(a["slug"], (a["title"], "frames"))
+    title = html.escape(a["title"])
+    cat = CATEGORIES[a["category"]][0]
+    cover_label = html.escape(label).replace("\n", "<br>")
+    media = '<span class="cover-shape"><i></i><i></i><i></i></span>'
+    if motif == "film":
+        media = '<img src="/assets/work/hibiwa/storyboard.jpg" alt="架空ブランドHIBIWAの動画制作サンプル" width="1350" height="480" loading="lazy"><small class="cover-disclosure">架空ブランドの制作サンプル</small>'
+    elif motif == "photo":
+        media = '<img src="/assets/recruit/care_filming.jpg" alt="職場での動画撮影を表したイメージ" width="1400" height="940" loading="lazy"><small class="cover-disclosure">写真はイメージです</small>'
+    visual = f'<div class="journal-cover cover-{a["category"]} motif-{motif}">{media}<span class="cover-label" aria-hidden="true">{cover_label}</span></div>'
+    search = html.escape(a["title"] + " " + a["description"] + " " + cat, quote=True)
+    return (f'<article class="journal-card" data-category="{a["category"]}" data-search="{search}">'
+            f'<a href="{a["path"]}" aria-labelledby="title-{a["slug"]}">{visual}'
+            f'<div class="journal-card-copy"><div class="journal-meta"><span>{cat}</span><time datetime="{a["date"]}">{a["date"].replace("-", ".")}</time></div>'
+            f'<h3 id="title-{a["slug"]}">{title}</h3><p>{html.escape(a["description"])}</p>'
+            '<span class="journal-read" aria-hidden="true">記事を読む <span>↗</span></span></div></a></article>')
+
+
 def column_index(arts):
     meta = {"path": "/column/", "crumb": "コラム", "schema_type": "CollectionPage", "updated": max((a.get('updated') or a['date'] for a in arts), default='2026-11-03'),
+            "body_class": "soi-site soi-journal", "article_list": arts, "contact_channel": "service_choice",
+            "contact_heading": "読んだ、その先を。",
+            "contact_text": "記事の考え方を、御社の採用や商品づくりにどう活かすか。目的に近い窓口からご相談ください。",
             "title": "コラム｜採用動画・SNS運用・ショートドラマの考え方｜株式会社SOI",
             "description": "SOIの採用動画・SNS運用・ショートドラマ制作について、自社の制作工程や運用の見直し、依頼前に確認したい内容を紹介します。"}
-    groups = "".join(
-        f'<h2 class="cat-h">{name}</h2>' + article_cards([a for a in arts if a["category"] == key])
-        for key, (name, _, _) in CATEGORIES.items() if any(a["category"] == key for a in arts))
-    content = f"""<header class="page-hero">
-  <div class="wrap">
-    {{{{crumbs}}}}
-    <span class="eyebrow">コラム</span>
-    <h1>採用と動画の、制作・運用ノート</h1>
-    <p class="lead">自社の制作工程、運用で見直したこと、依頼前に確認したいこと。SOIの記録と考え方をまとめています。</p>
+    filters = ''.join(f'<button type="button" data-category="{key}" aria-pressed="false">{"動画制作" if key == "drama" else name}<span>{sum(a["category"] == key for a in arts):02d}</span></button>'
+                      for key, (name, _, _) in CATEGORIES.items())
+    cards = ''.join(journal_card(a) for a in arts)
+    content = f"""<header class="journal-hero"><div class="wrap">
+  {{{{crumbs}}}}
+  <div class="journal-masthead"><span>SOI JOURNAL</span><span>採用・映像・運用のコラム</span></div>
+  <div class="journal-intro"><h1>伝える、<br class="journal-mobile-break">その先へ<span>。</span></h1><p>何を撮るか。どう届けるか。<br>制作の裏側から、運用の見直しまで。<br>SOIの記録と考え方。</p></div>
+  <div class="journal-feature-heading"><h2>SOIの取り組みから</h2><a href="#articles">すべての記事を見る <span aria-hidden="true">↓</span></a></div>
+  <div class="journal-features">
+    <a class="journal-feature feature-film" href="/column/ai-image-video-hibiwa/" aria-labelledby="feature-film-title">
+      <div class="feature-image"><img src="/assets/work/hibiwa/storyboard.jpg" alt="HIBIWAの制作サンプルを構成する、指輪のある日常の5場面" width="1350" height="480" fetchpriority="high"><span>架空ブランドの制作サンプル</span></div>
+      <div class="feature-copy"><div class="journal-meta"><span>制作ノート / ツイミル</span><span>01</span></div><h2 id="feature-film-title">5枚の画像を、<br>19.2秒の物語に。</h2><p>指輪ブランド「HIBIWA」のサンプルでたどる、画像・言葉・動きの組み立て方。</p><span class="feature-arrow" aria-hidden="true">↗</span></div>
+    </a>
+    <a class="journal-feature feature-measure" href="/column/line-contact-measurement/" aria-labelledby="feature-measure-title">
+      <div class="journal-meta"><span>運用ノート / SOI</span><span>02</span></div>
+      <div class="measure-visual" aria-hidden="true"><span>クリック</span><b>≠</b><span>問い合わせ</span></div>
+      <div><h2 id="feature-measure-title">「相談」を、<br>正しく数える。</h2><p>LINEボタンのクリックと、実際の問い合わせ。自社サイトの計測を見直した記録。</p></div><span class="feature-arrow" aria-hidden="true">↗</span>
+    </a>
   </div>
-</header>
-
-<section><div class="wrap">
-  <div class="topic-guide"><h2>検討中のテーマから読む</h2><div class="topic-grid">
-  <a href="/column/recruit-sns-agency/"><span>採用担当者の方へ</span><b>SNS採用代行、何を任せる？</b><small>業務範囲と見積もりの条件 →</small></a>
-  <a href="/recruit/video/"><span>採用動画を作りたい方へ</span><b>職場で何を撮る？</b><small>撮影内容・制作の流れ →</small></a>
-  <a href="/column/care-rpo-or-sns/"><span>介護施設の採用でお困りの方へ</span><b>採用代行とSNSの違いは？</b><small>必要な支援を選ぶ →</small></a>
-  <a href="/column/short-drama-production-company/"><span>商品・サービスを伝えたい方へ</span><b>制作会社をどう選ぶ？</b><small>企画・品質・見積もりの確認 →</small></a>
-  </div></div>
-  <h2 class="cat-h">新着</h2>
-  {article_cards(arts[:6])}
-  {groups}
+</div></header>
+<section class="journal-archive" id="articles" aria-labelledby="archive-title"><div class="wrap">
+  <div class="archive-heading"><div><span class="journal-overline">ALL ARTICLES</span><h2 id="archive-title">記事を探す<span>。</span></h2></div><span class="archive-total">{len(arts):02d}<small>ARTICLES</small></span></div>
+  <form class="journal-tools" role="search" aria-label="コラムを探す" hidden>
+    <div class="journal-filters" role="group" aria-label="記事のテーマ"><button type="button" data-category="all" aria-pressed="true">すべて<span>{len(arts):02d}</span></button>{filters}</div>
+    <div class="journal-search"><label for="journal-search">キーワード検索</label><div><input id="journal-search" type="search" placeholder="例：採用動画、LINE、台本" autocomplete="off"><button type="button" class="journal-clear" aria-label="検索文字を消す" hidden>×</button></div></div>
+  </form>
+  <div class="journal-results"><p id="journal-result-count" role="status" aria-live="polite" aria-atomic="true">全{len(arts)}記事</p><span>新着順</span></div>
+  <div class="journal-grid">{cards}</div>
+  <div class="journal-empty" hidden><h3>該当する記事がありません。</h3><p>別のキーワードやテーマでお探しください。</p><button type="button">条件をリセットして、すべて見る →</button></div>
+  <div class="journal-policy"><span>SOI JOURNAL</span><p>自社で取り組んだことと、制作・運用の考え方を発信します。<br>サンプルと実績を分け、確認できた事実をもとに。</p><a href="/company/#editorial-policy">記事の編集方針 <span aria-hidden="true">↗</span></a></div>
 </div></section>"""
     return meta, content, max((a["src"] for a in arts), key=lambda p: p.stat().st_mtime) if arts else ROOT / "build.py"
 
