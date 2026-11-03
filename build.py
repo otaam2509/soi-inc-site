@@ -441,6 +441,7 @@ def build():
             contact_note = 'LINEは代表の玉手が直接お返事します。オンライン面談（30分〜）のご予約もLINEからどうぞ。<br>メールの場合は info@soi-co-ltd.com へ'
         html_out = content if meta.get("standalone") else layout
         repl = {
+            "site_verification": '<meta name="msvalidate.01" content="2CEEE1AB3468FF6B339F1006A1F6DBF5">' if meta['path'] == '/' else '',
             "title": meta["title"],
             "og_title": meta.get("og_title", meta["title"]),
             "description": meta["description"],
