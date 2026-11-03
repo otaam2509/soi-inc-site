@@ -201,6 +201,19 @@ def inline_md(t):
 def md_to_html(md):
     """記事用の小さなMarkdown変換。## 見出し / ### 小見出し / - 箇条書き / 1. 番号 / > 囲み / 空行で段落"""
     out, toc, buf, lst = [], [], [], None
+    table = []
+
+    def flush_table():
+        if not table:
+            return
+        rows = [[c.strip() for c in row.strip('|').split('|')] for row in table]
+        if len(rows) >= 2 and all(re.fullmatch(r':?-{3,}:?', c) for c in rows[1]):
+            head = ''.join(f'<th scope="col">{inline_md(c)}</th>' for c in rows[0])
+            body = ''.join('<tr>' + ''.join(f'<td>{inline_md(c)}</td>' for c in row) + '</tr>' for row in rows[2:])
+            out.append(f'<div class="article-table"><table><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table></div>')
+        else:
+            out.append('<p>' + '<br>'.join(inline_md(row) for row in table) + '</p>')
+        table.clear()
 
     def flush():
         nonlocal buf, lst
@@ -212,6 +225,9 @@ def md_to_html(md):
 
     quote = []
     for line in md.splitlines() + [""]:
+        if line.startswith('|') and line.endswith('|'):
+            flush(); table.append(line); continue
+        flush_table()
         if line.startswith(">"):
             flush(); quote.append(line[1:].strip()); continue
         if quote:
@@ -220,7 +236,12 @@ def md_to_html(md):
             out.append(f'<aside class="soi-view"><b>{inline_md(title)}</b>' +
                        "".join(f"<p>{inline_md(x)}</p>" for x in body if x) + "</aside>")
             quote = []
-        if line.startswith("## "):
+        picture = re.fullmatch(r'!\[([^\]]+)\]\((/[^\s)]+)\)', line)
+        if picture:
+            flush()
+            alt, src = picture.groups()
+            out.append(f'<figure class="article-image"><img src="{html.escape(src, quote=True)}" alt="{html.escape(alt, quote=True)}" loading="lazy"></figure>')
+        elif line.startswith("## "):
             flush(); n = len(toc) + 1; toc.append(line[3:].strip())
             out.append(f'<h2 id="s{n}">{inline_md(line[3:].strip())}</h2>')
         elif line.startswith("### "):
@@ -309,6 +330,12 @@ def article_page(a, arts):
     author = ('<aside class="article-author" aria-label="記事の制作・運営情報"><p class="author-label">執筆・編集：株式会社SOI</p>'
               '<p>東京都品川区の映像制作会社。現場での撮影・編集と、企業の動画発信に関する考え方をまとめています。</p>'
               '<p>代表：玉手志弥（フォトグラファー）。<a href="/company/#about">代表紹介</a>・<a href="/company/#editorial-policy">記事の編集方針</a></p></aside>')
+    video = ''
+    if a.get('video_src'):
+        video = (f'<figure class="article-video"><video controls playsinline preload="none" '
+                 f'poster="{html.escape(a["video_poster"], quote=True)}" aria-label="{html.escape(a["video_title"], quote=True)}">'
+                 f'<source src="{html.escape(a["video_src"], quote=True)}" type="video/mp4"></video>'
+                 f'<figcaption>{html.escape(a["video_caption"])}</figcaption></figure>')
     content = f"""<header class="page-hero"><div class="wrap">
     {{{{crumbs}}}}
     <div class="post-meta"><span class="cat">{cat}</span><span>公開 <time datetime="{a['date']}">{a['date'].replace('-', '.')}</time></span>{upd}</div>
@@ -316,13 +343,17 @@ def article_page(a, arts):
     <p class="article-credit">執筆・編集：<a href="/company/#editorial-policy">株式会社SOI</a></p>
     <div class="article-service-link">{quick}</div>
 </div></header>
-<section><div class="wrap"><article class="prose post-body">{toc}{a['body']}</article>
+<section><div class="wrap"><article class="prose post-body">{video}{toc}{a['body']}</article>
   <div class="post-cta"><b>{cta_title}</b><span>{cta_text}</span><div class="ctas">{cta_links}</div></div>
   {author}
 </div></section>{rel}"""
     meta = {"path": a["path"], "crumb": a["title"], "parents": [("コラム", "/column/")], "h1": a["title"],
             "title": a["title"] + "｜株式会社SOI コラム", "description": a["description"],
             "article": {"date": a["date"], "updated": a.get("updated") or a["date"], "category": a["category"]}}
+    if a.get('video_src'):
+        meta['videos'] = [{"name": a['video_title'], "description": a['video_caption'],
+                           "contentUrl": a['video_src'], "thumbnailUrl": a['video_poster'],
+                           "uploadDate": a['video_uploaded'], "duration": a['video_duration'] }]
     if a["category"] == "recruit":
         meta.update({"org_description": RECRUIT_ORG_DESC, "mail_service": "人材採用のSNS運用",
                      "contact_text": "御社のサイトや求人を拝見して、採用動画の企画案を先にお作りします。ここまで費用はかかりません。会社名と、募集している職種だけお送りください。"})
@@ -332,9 +363,9 @@ def article_page(a, arts):
 
 
 def column_index(arts):
-    meta = {"path": "/column/", "crumb": "コラム", "schema_type": "CollectionPage", "updated": "2026-11-02",
+    meta = {"path": "/column/", "crumb": "コラム", "schema_type": "CollectionPage", "updated": max((a.get('updated') or a['date'] for a in arts), default='2026-11-03'),
             "title": "コラム｜採用動画・SNS運用・ショートドラマの考え方｜株式会社SOI",
-            "description": "採用動画やSNS運用、商品を物語で見せるショートドラマについて、一般的な基本と、映像制作の現場で私たちが大切にしている考え方をまとめています。"}
+            "description": "SOIの採用動画・SNS運用・ショートドラマ制作について、自社の制作工程や運用の見直し、依頼前に確認したい内容を紹介します。"}
     groups = "".join(
         f'<h2 class="cat-h">{name}</h2>' + article_cards([a for a in arts if a["category"] == key])
         for key, (name, _, _) in CATEGORIES.items() if any(a["category"] == key for a in arts))
@@ -342,8 +373,8 @@ def column_index(arts):
   <div class="wrap">
     {{{{crumbs}}}}
     <span class="eyebrow">コラム</span>
-    <h1>採用と動画の、基本と考え方</h1>
-    <p class="lead">採用動画やSNS運用、商品を物語で見せる動画について、一般的な基本と、映像制作の現場で私たちが大切にしている考え方をまとめています。</p>
+    <h1>採用と動画の、制作・運用ノート</h1>
+    <p class="lead">自社の制作工程、運用で見直したこと、依頼前に確認したいこと。SOIの記録と考え方をまとめています。</p>
   </div>
 </header>
 
