@@ -33,7 +33,8 @@ SITE = "https://soi-co-ltd.com"
 # Invalidate cached styles/scripts even when multiple releases occur on the same day.
 VERSION = hashlib.sha256(b"".join(p.read_bytes() for p in sorted((ROOT / "assets").rglob("*"))
                                  if p.suffix in {".css", ".js"})).hexdigest()[:12]
-# 相談の窓口=代表 玉手志弥の公式LINE(あいさつ文から面談予約へ。2026-10-20 志弥指示でフォームの代わりに)
+# 相談の窓口=サイトの申込フォーム(/contact/)→そのまま予約カレンダー(TimeRex)。2026-11-08 志弥指示で公式LINE経由をやめた
+# LINE_URL は llms 等の参照用に残すだけ。サイト上のボタンからは使わない
 LINE_URL = "https://lin.ee/TMkuCTn"  # LINE公式マネージャー「友だち追加用URL」(2026-10-20取得)
 GA_ID = "G-GR6X7ZXK0D"  # Googleアナリティクス(2026-10-20作成・info@soi-co-ltd.com)
 
@@ -319,13 +320,13 @@ def article_page(a, arts):
     upd = f'<span>更新 <time datetime="{a["updated"]}">{a["updated"].replace("-", ".")}</time></span>' if a.get("updated") else ""
     if a["category"] == "drama":
         cta_title = "この考え方を、あなたの商品・サービスなら。"
-        cta_text = "企画が決まっていなくても大丈夫です。制作サンプルを見て、公式LINEから申込フォームへお進みください。フォーム回答後、そのまま30分のオンライン相談を予約できます。"
-        cta_links = '<a class="cta" href="/tsuimiru/#works">ツイミルの制作サンプルを見る</a><a class="cta ghost" href="https://lin.ee/SC6LK06" target="_blank" rel="noopener noreferrer" data-track="line">公式LINEで相談・見積もり</a>'
+        cta_text = "企画が決まっていなくても大丈夫です。1分ほどのフォームに答えると、そのままオンライン相談の日程を選べます。"
+        cta_links = '<a class="cta" href="/tsuimiru/#works">ツイミルの制作サンプルを見る</a><a class="cta ghost" href="/contact/?service=tsuimiru" data-track="form" data-contact-service="tsuimiru">相談・見積もりを申し込む</a>'
         quick = '<a href="/tsuimiru/">ツイミルのサービス内容・制作サンプル →</a>'
     elif a["category"] == "recruit":
         cta_title = "御社の職場なら、何を撮るか。"
         cta_text = "会社名と募集職種をもとに、採用動画の企画案を無料でお作りします。投稿や応募窓口まで相談できます。"
-        cta_links = f'<a class="cta" href="/recruit/">SNS採用代行の範囲を見る</a><a class="cta ghost" href="{LINE_URL}" data-track="line">LINEで企画案を相談する</a>'
+        cta_links = f'<a class="cta" href="/recruit/">SNS採用代行の範囲を見る</a><a class="cta ghost" href="/contact/?service=recruit" data-track="form" data-contact-service="recruit">企画案を相談する</a>'
         quick = '<a href="/recruit/video/">採用動画の制作内容・流れを見る →</a>'
     else:
         cta_title = "動画を、誰に何のために届けるか。"
@@ -498,18 +499,18 @@ def build():
         if meta.get("contact_channel") == "service_choice":
             contact_heading = meta.get("contact_heading", "目的に合う窓口へ、ご相談ください")
             contact_text = meta.get("contact_text", CONTACT_TEXT_DEFAULT)
-            contact_actions = f'<a class="contact-choice" href="{LINE_URL}" data-track="line" data-contact-service="recruit"><small>SNS採用代行・採用動画制作</small><strong>採用について相談する <span aria-hidden="true">↗</span></strong></a><a class="contact-choice choice-film" data-contact-service="tsuimiru" href="https://lin.ee/SC6LK06" target="_blank" rel="noopener noreferrer" data-track="line"><small>商品・サービスの動画制作</small><strong>ツイミルに相談する <span aria-hidden="true">↗</span></strong></a>'
-            contact_note = f'LINEを使わない方は<a href="/contact/">申込フォーム</a>からどうぞ。<br>メールでのご相談：<a href="{mailto("採用支援／動画制作")}">info@soi-co-ltd.com</a>'
+            contact_actions = f'<a class="contact-choice" href="/contact/?service=recruit" data-track="form" data-contact-service="recruit"><small>SNS採用代行・採用動画制作</small><strong>採用について相談する <span aria-hidden="true">↗</span></strong></a><a class="contact-choice choice-film" data-contact-service="tsuimiru" href="/contact/?service=tsuimiru" data-track="form"><small>商品・サービスの動画制作</small><strong>ツイミルに相談する <span aria-hidden="true">↗</span></strong></a>'
+            contact_note = f'1分ほどのフォームに答えると、そのままオンライン相談の日程を選べます。<br>メールでのご相談：<a href="{mailto("採用支援／動画制作")}">info@soi-co-ltd.com</a>'
         elif use_tsuimiru_line:
-            contact_heading = "動画制作の相談・お見積もりは、公式LINEへ"
-            contact_text = "友だち追加後、申込フォームにわかる範囲でご入力ください。企画や予算が未定でも大丈夫です。フォーム回答後、そのまま30分のオンライン相談を予約できます。"
-            contact_actions = '<a class="cta cta-line" href="https://lin.ee/SC6LK06" target="_blank" rel="noopener noreferrer" data-track="line">公式LINEで相談・見積もり</a><a class="cta ghost" href="/tsuimiru/#works">制作サンプルを見る</a>'
-            contact_note = 'LINEを使わない方は<a href="/contact/?service=tsuimiru">申込フォーム</a>からどうぞ。フォーム送信だけで発注・料金は発生しません。'
+            contact_heading = "動画制作の相談・お見積もりは、こちらから"
+            contact_text = "1分ほどのフォームに、わかる範囲でご入力ください。企画や予算が未定でも大丈夫です。送信後、そのままオンライン相談の日程を選べます。"
+            contact_actions = '<a class="cta cta-line" href="/contact/?service=tsuimiru" data-track="form" data-contact-service="tsuimiru">相談・見積もりを申し込む</a><a class="cta ghost" href="/tsuimiru/#works">制作サンプルを見る</a>'
+            contact_note = 'フォーム送信・相談予約だけで発注・料金は発生しません。'
         else:
             contact_heading = "無料で、企画案をお作りします"
             contact_text = meta.get("contact_text", CONTACT_TEXT_DEFAULT)
-            contact_actions = f'<a class="cta cta-line" href="{LINE_URL}" data-track="line">{{{{icon:chat}}}}公式LINEで相談する</a><a class="cta ghost" href="{mailto(meta.get("mail_service", "人材採用のSNS運用／AIショートドラマ"))}" data-track="mail">メールで相談する</a>'
-            contact_note = '友だち追加後の案内から、オンライン面談までご予約いただけます。LINEを使わない方は<a href="/contact/?service=recruit">申込フォーム</a>からどうぞ。<br>メールの場合は info@soi-co-ltd.com へ'
+            contact_actions = f'<a class="cta cta-line" href="/contact/?service=recruit" data-track="form" data-contact-service="recruit">{{{{icon:chat}}}}相談を申し込む</a><a class="cta ghost" href="{mailto(meta.get("mail_service", "人材採用のSNS運用／AIショートドラマ"))}" data-track="mail">メールで相談する</a>'
+            contact_note = '1分ほどのフォームに答えると、そのままオンライン面談の日程を選べます。<br>メールの場合は info@soi-co-ltd.com へ'
         html_out = content if meta.get("standalone") else layout
         repl = {
             "site_verification": '<meta name="msvalidate.01" content="2CEEE1AB3468FF6B339F1006A1F6DBF5">' if meta['path'] == '/' else '',

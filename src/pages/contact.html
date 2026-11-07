@@ -71,16 +71,10 @@
       </div>
     </div>
 
-    <div class="field-row" id="f-contact">
-      <div class="field">
-        <label for="email">メールアドレス</label>
-        <input id="email" name="email" type="email" maxlength="160" autocomplete="email" inputmode="email">
-      </div>
-      <div class="field">
-        <label for="linename">LINEの表示名</label>
-        <input id="linename" name="linename" type="text" maxlength="80" autocomplete="off">
-      </div>
-      <p class="err field-wide" hidden>メールアドレスかLINEの表示名を、どちらかご入力ください。</p>
+    <div class="field" id="f-contact">
+      <label for="email">メールアドレス <em>必須</em></label>
+      <input id="email" name="email" type="email" maxlength="160" autocomplete="email" inputmode="email">
+      <p class="err" hidden>ご連絡先のメールアドレスをご入力ください。</p>
     </div>
 
     <div class="field" id="f-message">

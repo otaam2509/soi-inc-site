@@ -10,6 +10,7 @@
     var method = null;
     if (url.protocol === 'mailto:') method = 'mail';
     else if (url.hostname === 'lin.ee' || url.hostname === 'line.me') method = 'line';
+    else if (url.origin === location.origin && url.pathname === '/contact/' && location.pathname !== '/contact/') method = 'form';
     else if (url.hostname === 'ig.me' && url.pathname === '/m/tsuimiru_aimovie') method = 'instagram_dm';
     else if (link.hasAttribute('data-track') && link.getAttribute('data-track') === 'instagram_profile') method = 'instagram_profile';
     if (method) {

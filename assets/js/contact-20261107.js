@@ -33,7 +33,7 @@
   if (btn) btn.setAttribute('href', '#apply');
 
   function checked(name) { return form.querySelector('input[name="' + name + '"]:checked'); }
-  function val(name) { return (form.elements[name].value || '').trim(); }
+  function val(name) { var el = form.elements[name]; return el ? (el.value || '').trim() : ''; }
   function setError(box, on) { var e = box.querySelector('.err'); if (e) e.hidden = !on; box.classList.toggle('has-error', on); }
 
   var q = new URLSearchParams(location.search);
@@ -52,7 +52,7 @@
   function validate() {
     var checks = [
       ['f-source', !!checked('source')], ['f-service', !!checked('service')], ['f-name', !!val('name')],
-      ['f-contact', !!(val('email') || val('linename'))], ['f-message', !!val('message')]
+      ['f-contact', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val('email'))], ['f-message', !!val('message')]
     ];
     var first = null;
     checks.forEach(function (c) {
