@@ -52,3 +52,4 @@
 .home-message p{margin:0 0 14px;font-size:14px;color:var(--muted);max-width:38em}
 .home-message a{color:var(--green);font-size:13px;font-weight:600}
 @media(max-width:600px){.home-message{grid-template-columns:minmax(0,1fr)}.home-message img{width:160px;height:160px}}
+.home-credits{list-style:none;margin:20px 0 0;padding:14px 0 0;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:6px 22px;font-size:12.5px;color:var(--muted)}
