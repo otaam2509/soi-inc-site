@@ -1,0 +1,109 @@
+<!--page {
+  "path": "/contact/",
+  "body_class": "soi-site soi-contact-page",
+  "updated": "2026-11-07",
+  "crumb": "ご相談・お申し込み",
+  "title": "ご相談・お申し込み｜株式会社SOI",
+  "description": "株式会社SOIへのご相談・お申し込みフォームです。人材採用のSNS運用・採用動画、AI動画制作ツイミルについて、1分ほどの入力でオンライン相談の日程まで進めます。"
+} -->
+<header class="page-hero contact-hero">
+  <div class="wrap">
+    {{crumbs}}
+    <h1>ご相談・お申し込み</h1>
+    <p class="lead">1分ほどで入力できます。送信すると、そのままオンライン相談の日程を選べます。</p>
+  </div>
+</header>
+
+<section id="apply" class="apply-section"><div class="wrap apply-grid">
+  <aside class="apply-steps" aria-label="お申し込みの流れ">
+    <p class="section-label">HOW IT WORKS</p>
+    <ol>
+      <li><b>このフォームを送信</b><span>企画や予算が未定でも大丈夫です。</span></li>
+      <li><b>日程を選ぶ</b><span>送信後の画面から、空いている日時を選びます。</span></li>
+      <li><b>オンラインで相談</b><span>企画の方向性と費用の目安をご説明します。</span></li>
+    </ol>
+    <p class="apply-note">送信・相談予約だけで料金は発生しません。</p>
+  </aside>
+
+  <form id="apply-form" class="apply-form" novalidate>
+    <fieldset class="field" id="f-source">
+      <legend>当社を知ったきっかけ <em>必須</em></legend>
+      <div class="chips">
+        <label><input type="radio" name="source" value="YouTube"><span>YouTube</span></label>
+        <label><input type="radio" name="source" value="Instagram"><span>Instagram</span></label>
+        <label><input type="radio" name="source" value="TikTok"><span>TikTok</span></label>
+        <label><input type="radio" name="source" value="X(旧Twitter)"><span>X（旧Twitter）</span></label>
+        <label><input type="radio" name="source" value="Google検索・ホームページ"><span>Google検索・ホームページ</span></label>
+        <label><input type="radio" name="source" value="ChatGPTなどのAI"><span>ChatGPTなどのAI</span></label>
+        <label><input type="radio" name="source" value="ご紹介"><span>ご紹介</span></label>
+        <label><input type="radio" name="source" value="メール・DM・お手紙"><span>メール・DM・お手紙</span></label>
+        <label><input type="radio" name="source" value="その他"><span>その他</span></label>
+      </div>
+      <p class="err" hidden>きっかけを1つお選びください。</p>
+    </fieldset>
+
+    <div class="field" id="f-detail" hidden>
+      <label for="detail"><span id="detail-label">くわしく教えてください</span> <small>任意</small></label>
+      <input id="detail" name="detail" type="text" maxlength="200" autocomplete="off">
+    </div>
+
+    <fieldset class="field" id="f-service">
+      <legend>ご相談のサービス <em>必須</em></legend>
+      <div class="chips">
+        <label><input type="radio" name="service" value="人材採用のSNS運用・採用動画" data-key="recruit"><span>人材採用のSNS運用・採用動画</span></label>
+        <label><input type="radio" name="service" value="AI動画制作（ツイミル）" data-key="tsuimiru"><span>AI動画制作（ツイミル）</span></label>
+        <label><input type="radio" name="service" value="まだ決めていない" data-key="undecided"><span>まだ決めていない</span></label>
+      </div>
+      <p class="err" hidden>ご相談のサービスをお選びください。</p>
+    </fieldset>
+
+    <div class="field-row">
+      <div class="field" id="f-name">
+        <label for="name">お名前 <em>必須</em></label>
+        <input id="name" name="name" type="text" maxlength="80" autocomplete="name" required>
+        <p class="err" hidden>お名前をご入力ください。</p>
+      </div>
+      <div class="field">
+        <label for="company">会社名・屋号 <small>任意</small></label>
+        <input id="company" name="company" type="text" maxlength="120" autocomplete="organization">
+      </div>
+    </div>
+
+    <div class="field-row" id="f-contact">
+      <div class="field">
+        <label for="email">メールアドレス</label>
+        <input id="email" name="email" type="email" maxlength="160" autocomplete="email" inputmode="email">
+      </div>
+      <div class="field">
+        <label for="linename">LINEの表示名</label>
+        <input id="linename" name="linename" type="text" maxlength="80" autocomplete="off">
+      </div>
+      <p class="err field-wide" hidden>メールアドレスかLINEの表示名を、どちらかご入力ください。</p>
+    </div>
+
+    <div class="field" id="f-message">
+      <label for="message">ご相談内容 <em>必須</em></label>
+      <textarea id="message" name="message" rows="4" maxlength="1500" placeholder="未定なら「相談して決めたい」で大丈夫です。"></textarea>
+      <p class="err" hidden>ご相談内容をご入力ください。</p>
+    </div>
+
+    <div class="field">
+      <label for="url">会社・サービス・SNSのURL <small>任意</small></label>
+      <input id="url" name="url" type="url" maxlength="300" inputmode="url" autocomplete="url">
+    </div>
+
+    <p class="apply-privacy">ご入力いただいた内容は、ご相談への対応のために利用します。<a href="/privacy/">プライバシーポリシー</a></p>
+    <button class="cta apply-submit" type="submit">送信して日程を選ぶ</button>
+    <p class="err" id="submit-error" hidden>送信できませんでした。通信環境をご確認のうえ、もう一度お試しください。うまくいかない場合は info@soi-co-ltd.com へご連絡ください。</p>
+  </form>
+
+  <div id="apply-thanks" class="apply-thanks" tabindex="-1" hidden>
+    <p class="section-label">THANK YOU</p>
+    <h2 id="thanks-title">ありがとうございます。</h2>
+    <p id="thanks-body">お申し込みを受け付けました。続けて、30分のオンライン相談の日程をお選びください。</p>
+    <a id="thanks-book" class="cta" href="https://timerex.net/s/otama2509_3ae3/721d36be">日程を選ぶ</a>
+    <p class="apply-note" id="thanks-auto"></p>
+    <p class="apply-note">Google Meetの参加URLは、予約完了メールでお届けします。</p>
+  </div>
+</div></section>
+<script src="/assets/js/contact-20261107.js?v={{version}}" defer></script>

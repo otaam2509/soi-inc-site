@@ -499,17 +499,17 @@ def build():
             contact_heading = meta.get("contact_heading", "目的に合う窓口へ、ご相談ください")
             contact_text = meta.get("contact_text", CONTACT_TEXT_DEFAULT)
             contact_actions = f'<a class="contact-choice" href="{LINE_URL}" data-track="line" data-contact-service="recruit"><small>SNS採用代行・採用動画制作</small><strong>採用について相談する <span aria-hidden="true">↗</span></strong></a><a class="contact-choice choice-film" data-contact-service="tsuimiru" href="https://lin.ee/SC6LK06" target="_blank" rel="noopener noreferrer" data-track="line"><small>商品・サービスの動画制作</small><strong>ツイミルに相談する <span aria-hidden="true">↗</span></strong></a>'
-            contact_note = f'採用のご相談は代表の玉手が対応。ツイミルはLINEの申込フォームからオンライン相談へ。<br>メールでのご相談：<a href="{mailto("採用支援／動画制作")}">info@soi-co-ltd.com</a>'
+            contact_note = f'LINEを使わない方は<a href="/contact/">申込フォーム</a>からどうぞ。<br>メールでのご相談：<a href="{mailto("採用支援／動画制作")}">info@soi-co-ltd.com</a>'
         elif use_tsuimiru_line:
             contact_heading = "動画制作の相談・お見積もりは、公式LINEへ"
             contact_text = "友だち追加後、申込フォームにわかる範囲でご入力ください。企画や予算が未定でも大丈夫です。フォーム回答後、そのまま30分のオンライン相談を予約できます。"
             contact_actions = '<a class="cta cta-line" href="https://lin.ee/SC6LK06" target="_blank" rel="noopener noreferrer" data-track="line">公式LINEで相談・見積もり</a><a class="cta ghost" href="/tsuimiru/#works">制作サンプルを見る</a>'
-            contact_note = '必須項目は、お名前・LINE表示名・相談内容の3つです。フォーム送信だけで発注・料金は発生しません。'
+            contact_note = 'LINEを使わない方は<a href="/contact/?service=tsuimiru">申込フォーム</a>からどうぞ。フォーム送信だけで発注・料金は発生しません。'
         else:
             contact_heading = "無料で、企画案をお作りします"
             contact_text = meta.get("contact_text", CONTACT_TEXT_DEFAULT)
             contact_actions = f'<a class="cta cta-line" href="{LINE_URL}" data-track="line">{{{{icon:chat}}}}公式LINEで相談する</a><a class="cta ghost" href="{mailto(meta.get("mail_service", "人材採用のSNS運用／AIショートドラマ"))}" data-track="mail">メールで相談する</a>'
-            contact_note = 'LINEは代表の玉手が直接お返事します。オンライン面談（30分〜）のご予約もLINEからどうぞ。<br>メールの場合は info@soi-co-ltd.com へ'
+            contact_note = '友だち追加後の案内から、オンライン面談までご予約いただけます。LINEを使わない方は<a href="/contact/?service=recruit">申込フォーム</a>からどうぞ。<br>メールの場合は info@soi-co-ltd.com へ'
         html_out = content if meta.get("standalone") else layout
         repl = {
             "site_verification": '<meta name="msvalidate.01" content="2CEEE1AB3468FF6B339F1006A1F6DBF5">' if meta['path'] == '/' else '',
