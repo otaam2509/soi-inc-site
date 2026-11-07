@@ -35,6 +35,7 @@
 - 志弥指示: 公式LINEの流入を自動で申込・予約まで進める。問い合わせには「当社を知ったきっかけ」を必須にし、見た媒体へのお礼につなげる。10/20の「フォームは作らない」はこの指示で置き換え。
 - 流れ: 公式LINEのあいさつ → `/contact/` → 送信 → きっかけ別のお礼を表示 → 8秒後にTimeRexへ自動移動（採用=721d36be・ツイミル=2b3057e4）。`?service=recruit|tsuimiru` で相談サービスを選択済みにできる。
 - 本文 `src/pages/contact.html`、処理 `assets/js/contact-20261107.js`、見た目 `assets/css/contact-20261107.css`。回答の保存先はGoogleフォーム「ツイミル｜動画制作の相談・お見積もり申込」（info@soi-co-ltd.com・編集ID 1tnoPvcnSWH5NBBDL4L439mNybl4OgNc0mFitqpN29dI・Chromeでは u/3）。回答はメール通知でinfo@へ届く。
+- 回答の一覧はスプレッドシート「株式会社SOI 問い合わせ一覧」(1L6Sat5bm305IbrfDcKyCP2WOUebt_w8RCF5c7XoJ7h8・info@所有)。Chatwork通知は `../SOI問い合わせ通知/`(Vercel関数)。LINEのあいさつは「玉手志弥」「ツイミル」の両方から /contact/ へ案内。
 - **Googleフォームの質問や選択肢を変えたら、`contact-20261107.js` の ENTRY と HTML の value を必ず合わせる**（ずれると送信が記録されない）。no-corsで応答を読めないので、変更後は実際に1件送って回答に届くか確認する。
 
 ## コラム(記事)の足し方(2026-10-19〜)
