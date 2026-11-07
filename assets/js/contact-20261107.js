@@ -3,6 +3,8 @@
 (function () {
   'use strict';
   var FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdLMGcgFvHBGszuEwAXt-NO2ouqQD_14MZYSgEeA2KTv1QbDg/formResponse';
+  // 申し込みをChatworkへ知らせる受け口(../SOI問い合わせ通知)
+  var NOTIFY_URL = 'https://soi-contact-notify.vercel.app/api/notify';
   var ENTRY = {
     source: 'entry.1949914588', detail: 'entry.1366008236', service: 'entry.289968959', email: 'entry.1123148034',
     name: 'entry.2047311551', linename: 'entry.1940385811', company: 'entry.172176752', message: 'entry.752150822', url: 'entry.1015494649'
@@ -91,11 +93,15 @@
     body.set(ENTRY.linename, val('linename') || '未記入');
     body.set(ENTRY.message, val('message'));
     ['detail', 'email', 'company', 'url'].forEach(function (k) { if (val(k)) body.set(ENTRY[k], val(k)); });
+    var notice = {source: sourceInput.value, service: serviceInput.value};
+    ['detail', 'name', 'company', 'email', 'linename', 'message', 'url'].forEach(function (k) { notice[k] = val(k); });
     submit.disabled = true;
     fail.hidden = true;
     submit.textContent = '送信しています…';
     // no-cors なので応答の中身は読めない。通信自体が失敗したときだけ catch に入る。
     fetch(FORM_URL, {method: 'POST', mode: 'no-cors', body: body}).then(function () {
+      // 通知の失敗で申し込みを止めない。回答はGoogleフォームに残っている。
+      fetch(NOTIFY_URL, {method: 'POST', headers: {'Content-Type': 'text/plain'}, body: JSON.stringify(notice), keepalive: true}).catch(function () {});
       if (typeof window.gtag === 'function') window.gtag('event', 'inquiry_submit', {source: sourceInput.value, service: serviceInput.getAttribute('data-key')});
       showThanks(sourceInput.value, serviceInput.getAttribute('data-key'));
     }).catch(function () {
