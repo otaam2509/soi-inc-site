@@ -511,8 +511,16 @@ def build():
             contact_text = meta.get("contact_text", CONTACT_TEXT_DEFAULT)
             contact_actions = f'<a class="cta cta-line" href="/contact/?service=recruit" data-track="form" data-contact-service="recruit">{{{{icon:chat}}}}相談を申し込む</a><a class="cta ghost" href="{mailto(meta.get("mail_service", "人材採用のSNS運用／AIショートドラマ"))}" data-track="mail">メールで相談する</a>'
             contact_note = '1分ほどのフォームに答えると、そのままオンライン面談の日程を選べます。<br>メールの場合は info@soi-co-ltd.com へ'
+        # 上部の「相談する」=申込フォームへ直行(2026-11-08 志弥指示)。ページに合わせてサービスを選んだ状態で開く
+        if use_tsuimiru_line:
+            header_cta = "/contact/?service=tsuimiru"
+        elif meta["path"].startswith("/recruit"):
+            header_cta = "/contact/?service=recruit"
+        else:
+            header_cta = "/contact/"
         html_out = content if meta.get("standalone") else layout
         repl = {
+            "header_cta": header_cta,
             "site_verification": '<meta name="msvalidate.01" content="2CEEE1AB3468FF6B339F1006A1F6DBF5">' if meta['path'] == '/' else '',
             "title": meta["title"],
             "body_class": html.escape(meta.get("body_class", "soi-site"), quote=True),
