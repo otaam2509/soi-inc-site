@@ -10,14 +10,16 @@
   var BOOKING = {
     recruit: 'https://timerex.net/s/otama2509_3ae3/721d36be',
     tsuimiru: 'https://timerex.net/s/otama2509_3ae3/2b3057e4',
+    line: 'https://timerex.net/s/otama2509_3ae3/2b3057e4',
     undecided: 'https://timerex.net/s/otama2509_3ae3/721d36be'
   };
   var DETAIL_LABEL = {
-    'YouTube': 'ご覧になった動画やチャンネル', 'Instagram': 'ご覧になった投稿やアカウント', 'TikTok': 'ご覧になった動画やアカウント',
+    'ホリエモンチャンネル': 'ご覧になった感想やご相談のきっかけ', 'YouTube': 'ご覧になった動画やチャンネル', 'Instagram': 'ご覧になった投稿やアカウント', 'TikTok': 'ご覧になった動画やアカウント',
     'X(旧Twitter)': 'ご覧になった投稿やアカウント', 'Google検索・ホームページ': '検索した言葉やご覧になったページ',
     'ChatGPTなどのAI': '使ったAIや聞いた内容', 'ご紹介': 'ご紹介者のお名前', 'メール・DM・お手紙': '届いた内容', 'その他': 'くわしく教えてください'
   };
   var THANKS = {
+    'ホリエモンチャンネル': 'ホリエモンチャンネルをご覧いただき、ありがとうございます。',
     'YouTube': 'YouTubeをご覧いただき、ありがとうございます。', 'Instagram': 'Instagramをご覧いただき、ありがとうございます。',
     'TikTok': 'TikTokをご覧いただき、ありがとうございます。', 'X(旧Twitter)': 'Xをご覧いただき、ありがとうございます。',
     'Google検索・ホームページ': 'ホームページをご覧いただき、ありがとうございます。', 'ChatGPTなどのAI': 'SOIを見つけていただき、ありがとうございます。',
